@@ -43,7 +43,7 @@
     <nav class="navbar" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
             <a class="navbar-item" href="{{ route('welcome') }}">
-                <img src="{{asset('img/happy_unicorn_64.png')}}" width="64" height="41">
+                <img src="{{asset('img/happy_unicorn_LOGO2.png')}}" width="112" height="28" style="border:solid #000; border-width: 1px 0px;">
             </a>
 
             <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false"
@@ -141,10 +141,10 @@
         @yield('content')
     </div>
 
-    <footer class="footer" style="background-color: #00b89c; height: 94px;">
+    <footer class="footer" style="background-color: /*#00b89c*/  whitesmoke; height: 94px;">
         <div class="content has-text-centered">
-            <img src="img/happy_unicorn_64.png" alt="Mappy Unicorn Logo">
-            <small style="margin-bottom: 40px;">A Happy Unicorn presentation</small>
+            <img src="{{asset('img/happy_unicorn_64.png')}}" width="41" height="64" alt="Happy Unicorn Logo">
+            {{--<small style="margin-bottom: 40px;">A Happy Unicorn presentation</small>--}}
         </div>
     </footer>
 </div>
