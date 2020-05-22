@@ -3,10 +3,11 @@
  * includes Vue and other libraries. It is a great starting point when
  * building robust, powerful web applications using Vue and Laravel.
  */
+
 require('./bootstrap');
 
 import vue from 'vue';
-
+vue.use(require('vue-moment'));
 window.Vue = vue;
 
 /**
@@ -22,6 +23,8 @@ window.Vue = vue;
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('query-message', require('./components/base/QueryMessage.vue').default);
+
+Vue.component('kind-list', require('./components/KindList.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
