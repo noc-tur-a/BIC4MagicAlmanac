@@ -1986,29 +1986,28 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-
-/*
-    export default {
-        name: "KindList",
-        data: function() {
-            return {
-
-                status: 'Critical',
-                kinds: []
-            }
-        },
-
-        methods: {
-            changeStatus() {
-                if(this.status === 'Critical') { this.status = 'Normal'; } else { this.status = 'Critical'; }
-            }
-        }
-    }
-*/
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      kinds: []
+      kinds: [],
+      isActive: false
     };
   },
   created: function created() {
@@ -2017,11 +2016,41 @@ __webpack_require__.r(__webpack_exports__);
     axios.get('/list/kind').then(function (response) {
       _this.kinds = response.data;
       console.log(_this.kinds);
+      /*
+      for(let i = 0; i < this.kinds.length; i++) {
+          console.log("Kinds: " + this.kinds[i].id);
+          console.log("this.kinds[i].spells.length: " + this.kinds[i].spells.length)
+          for(let j = 0; j < this.kinds[i].spells.length; j++) {
+              console.log("Spells: " + this.kinds[i].spells[j].id + " " + this.kinds[i].spells[j].name);
+          }
+      }
+      */
     })["catch"](function (error) {
       console.log(error);
     });
-  }
-});
+  },
+  methods: {
+    showSpells: function showSpells(e) {
+      //this.isActive = !this.isActive;
+      var elementRow = e.target.parentNode.nextElementSibling;
+      var elementRowParent = e.target.parentNode; //var element = e.target.parentNode.nextElementSibling.childNodes[0].childNodes[0];
+
+      if (!elementRow.classList.contains("maTableOuterRowHidden")) {
+        return;
+      }
+
+      if (elementRow.classList.contains("maTableOuterRowShow")) {
+        elementRow.classList.remove("maTableOuterRowShow");
+        elementRowParent.classList.remove("maTableOuterRowParentShow"); //element.classList.remove("maTableInnerShow");
+      } else {
+        elementRow.classList.add("maTableOuterRowShow");
+        elementRowParent.classList.add("maTableOuterRowParentShow"); //element.classList.add("maTableInnerShow");
+      }
+    } //END showSpells
+
+  } //END Methods
+
+}); //End export default
 
 /***/ }),
 
@@ -19709,51 +19738,133 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "content" }, [
-    _c("h1", [_vm._v("List kinds")]),
+  return _c("div", { staticClass: "ma-content" }, [
+    _c("h1", [_vm._v("List of kinds")]),
     _vm._v(" "),
     _vm.kinds && _vm.kinds.length
       ? _c(
           "table",
+          { staticClass: "ma-tableOuter" },
           [
             _vm._m(0),
             _vm._v(" "),
             _vm._l(_vm.kinds, function(kind) {
-              return _c("tr", [
-                _c("td", [_vm._v(_vm._s(kind.id))]),
+              return [
+                _c(
+                  "tr",
+                  {
+                    staticClass: "maTableOuterRow",
+                    on: { click: _vm.showSpells }
+                  },
+                  [
+                    _c("td", [_vm._v(_vm._s(kind.name))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(kind.description))]),
+                    _vm._v(" "),
+                    _c("td", [
+                      _vm._v(
+                        _vm._s(
+                          _vm._f("moment")(
+                            kind.created_at,
+                            "DD.MM.YYYY - hh:mm:ss"
+                          )
+                        )
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("td", [
+                      _vm._v(
+                        _vm._s(
+                          _vm._f("moment")(
+                            kind.updated_at,
+                            "DD.MM.YYYY - hh:mm:ss"
+                          )
+                        )
+                      )
+                    ])
+                  ]
+                ),
                 _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(kind.slug))]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(kind.name))]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(kind.description))]),
-                _vm._v(" "),
-                _c("td", [
-                  _vm._v(
-                    _vm._s(
-                      _vm._f("moment")(kind.created_at, "DD.MM.YYYY - hh:mm:ss")
+                kind.spells && kind.spells.length
+                  ? _c(
+                      "tr",
+                      { staticClass: "maTableOuterRow maTableOuterRowHidden " },
+                      [
+                        _c("td", { attrs: { colspan: "4" } }, [
+                          _c(
+                            "table",
+                            {
+                              staticClass: "ma-tableInner",
+                              class: { maTableInnerShow: _vm.isActive }
+                            },
+                            [
+                              _c("thead", [
+                                _c("tr", [
+                                  _c("td", { attrs: { colspan: "5" } }, [
+                                    _c("h3", [
+                                      _vm._v(
+                                        "Spells of " +
+                                          _vm._s(kind.name) +
+                                          " (Total: " +
+                                          _vm._s(kind.spells.length) +
+                                          " )"
+                                      )
+                                    ])
+                                  ])
+                                ]),
+                                _vm._v(" "),
+                                _vm._m(1, true)
+                              ]),
+                              _vm._v(" "),
+                              _vm._l(kind.spells, function(spell) {
+                                return _c("tr", [
+                                  _c("td", [_vm._v(_vm._s(spell.name))]),
+                                  _vm._v(" "),
+                                  _c("td", [_vm._v(_vm._s(spell.quote))]),
+                                  _vm._v(" "),
+                                  _c("td", [_vm._v(_vm._s(spell.description))]),
+                                  _vm._v(" "),
+                                  _c("td", [
+                                    _vm._v(
+                                      _vm._s(
+                                        _vm._f("moment")(
+                                          spell.created_at,
+                                          "DD.MM.YYYY - hh:mm:ss"
+                                        )
+                                      )
+                                    )
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("td", [
+                                    _vm._v(
+                                      _vm._s(
+                                        _vm._f("moment")(
+                                          spell.updated_at,
+                                          "DD.MM.YYYY - hh:mm:ss"
+                                        )
+                                      )
+                                    )
+                                  ])
+                                ])
+                              })
+                            ],
+                            2
+                          )
+                        ])
+                      ]
                     )
-                  )
-                ]),
-                _vm._v(" "),
-                _c("td", [
-                  _vm._v(
-                    _vm._s(
-                      _vm._f("moment")(kind.updated_at, "DD.MM.YYYY - hh:mm:ss")
-                    )
-                  )
-                ])
-              ])
+                  : _vm._e()
+              ]
             }),
             _vm._v(" "),
             _c("tfoot", [
               _c("tr", [
-                _c("td", { attrs: { colspan: "3" } }, [
+                _c("td", [
                   _vm._v("Total Kinds: " + _vm._s(_vm.kinds.length) + " ")
                 ]),
                 _vm._v(" "),
                 _c("td", { attrs: { colspan: "3" } }, [
-                  _vm._v("Total Spells:  ")
+                  _vm._v("Total Spells: ")
                 ])
               ])
             ])
@@ -19770,10 +19881,6 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("thead", [
       _c("tr", [
-        _c("th", [_vm._v("ID")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Slug")]),
-        _vm._v(" "),
         _c("th", [_vm._v("Name")]),
         _vm._v(" "),
         _c("th", [_vm._v("Description")]),
@@ -19782,6 +19889,22 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", [_vm._v("Updated")])
       ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("tr", [
+      _c("th", [_vm._v("Name")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Quote")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Description")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Created")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Updated")])
     ])
   }
 ]

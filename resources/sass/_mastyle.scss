@@ -1,0 +1,81 @@
+.ma-content {
+    width: 100%;
+}
+
+h1 {
+    font-size: 1.4em;
+    font-weight: bold;
+    padding:10px 20px;
+}
+
+h3 {
+    font-weight: bold;
+}
+
+.ma-tableOuter {
+    border:1px solid #363636;
+    border-radius: 15px;
+    border-collapse: separate;
+    width: 100%;
+    cursor: pointer;
+
+}
+
+.maTableOuterRowHidden {
+    display: none;
+}
+
+.maTableOuterRowShow {
+    background-color: #dddddd;
+    display: table-row;
+}
+
+.maTableOuterRowParentShow td {
+    background-color: #dddddd;
+    border:0;
+}
+
+.maTableOuterRow:hover {
+    background-color: #dddddd;
+}
+
+.ma-tableOuter th, td {
+    padding:5px 10px;
+    border-bottom: 1px solid #000;
+}
+
+.ma-tableOuter td:first-child, .ma-tableOuter td:nth-last-child(-n+2) {
+    white-space: nowrap;
+}
+
+.ma-tableOuter th {
+    border-bottom: 2px solid #363636;
+}
+
+.ma-tableOuter tfoot td {
+    border-top: 1px solid #363636;
+}
+
+.ma-tableOuter tfoot tr:last-child td {
+    border-bottom: 0;
+}
+
+.ma-tableInner {
+    background-color: #fff;
+    border:1px solid #363636;
+    border-radius: 15px;
+    border-collapse: separate;
+    white-space: normal;
+    cursor: default;
+    display: inherit;
+}
+
+.ma-tableInner tr:last-child td {
+    border-bottom: 0;
+}
+
+.ma-tableInner thead tr td {
+    border-bottom: 0;
+}
+
+
