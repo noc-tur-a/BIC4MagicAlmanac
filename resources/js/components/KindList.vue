@@ -9,6 +9,7 @@
                 <th>Description</th>
                 <th>Created</th>
                 <th>Updated</th>
+                <th>Edit</th>
             </tr>
             </thead>
             <template v-for="kind in kinds">
@@ -17,9 +18,11 @@
                 <td>{{ kind.description }}</td>
                 <td>{{ kind.created_at | moment("DD.MM.YYYY - hh:mm:ss") }}</td>
                 <td>{{ kind.updated_at | moment("DD.MM.YYYY - hh:mm:ss") }}</td>
+                <!-- kind/SLUGNAME/edit -->
+                <td><a :href="kindLink + kind.slug + editLink">Edit</a></td>
             </tr>
             <tr class="maTableOuterRow maTableOuterRowHidden " v-if="kind.spells && kind.spells.length">
-                <td colspan="4">
+                <td colspan="5">
                     <table class="ma-tableInner" v-bind:class="{maTableInnerShow: isActive}">
                     <!--<table class="ma-tableInner">-->
                         <thead>
@@ -62,24 +65,17 @@
         data() {
             return {
                 kinds: [],
+                //link: "kind/" + this.kind.slug + "/edit",
+                kindLink: "kind/",
+                editLink: "/edit",
                 isActive: false
             }
         },
         created() {
+            //TODO Maybe use the fetch method?
             axios.get('/list/kind')
                 .then(response => {
                     this.kinds = response.data
-                    console.log(this.kinds);
-                    /*
-                    for(let i = 0; i < this.kinds.length; i++) {
-                        console.log("Kinds: " + this.kinds[i].id);
-                        console.log("this.kinds[i].spells.length: " + this.kinds[i].spells.length)
-                        for(let j = 0; j < this.kinds[i].spells.length; j++) {
-                            console.log("Spells: " + this.kinds[i].spells[j].id + " " + this.kinds[i].spells[j].name);
-                        }
-                    }
-                    */
-
                 })
                 .catch(error => {
                     console.log(error);
@@ -88,21 +84,17 @@
         methods: {
             showSpells(e) {
 
-                //this.isActive = !this.isActive;
                 var elementRow = e.target.parentNode.nextElementSibling
                 var elementRowParent = e.target.parentNode;
-                //var element = e.target.parentNode.nextElementSibling.childNodes[0].childNodes[0];
 
                 if(!elementRow.classList.contains("maTableOuterRowHidden")) { return }
 
                 if(elementRow.classList.contains("maTableOuterRowShow")) {
                     elementRow.classList.remove("maTableOuterRowShow");
                     elementRowParent.classList.remove("maTableOuterRowParentShow");
-                    //element.classList.remove("maTableInnerShow");
                 } else {
                     elementRow.classList.add("maTableOuterRowShow");
                     elementRowParent.classList.add("maTableOuterRowParentShow");
-                    //element.classList.add("maTableInnerShow");
                 }
 
             } //END showSpells

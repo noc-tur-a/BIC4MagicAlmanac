@@ -13,6 +13,7 @@
         "axios": "^0.19",
         "bulma": "^0.7.5",
         "cross-env": "^7.0",
+        "dayjs": "^1.8.28",
         "laravel-mix": "^5.0.4",
         "lodash": "^4.17.13",
         "resolve-url-loader": "^2.3.1",

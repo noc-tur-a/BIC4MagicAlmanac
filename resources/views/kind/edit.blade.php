@@ -4,7 +4,7 @@
 @section('content')
     <section class="section">
         <div class="container">
-            <h1>Edit kind</h1>
+            <kind-edit></kind-edit>
         </div>
     </section>
 @endsection

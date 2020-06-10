@@ -7,6 +7,7 @@
 require('./bootstrap');
 
 import vue from 'vue';
+//use the moment Javascript Library
 vue.use(require('vue-moment'));
 window.Vue = vue;
 
@@ -25,6 +26,10 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 Vue.component('query-message', require('./components/base/QueryMessage.vue').default);
 
 Vue.component('kind-list', require('./components/KindList.vue').default);
+Vue.component('kind-edit', require('./components/KindEdit.vue').default);
+Vue.component('kind-create', require('./components/KindCreate.vue').default);
+
+Vue.component('test', require('./components/test.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
