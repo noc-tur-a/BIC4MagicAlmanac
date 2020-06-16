@@ -24,9 +24,9 @@ class KindController extends Controller
      */
     public function index()
     {
-        $kind = Kind::all()->load('spells');
+        $kinds = Kind::all()->load('spells');
 
-        return view('kind.index', compact('kind'));
+        return view('kind.index', compact('kinds'));
     }
 
     /**
@@ -84,10 +84,14 @@ class KindController extends Controller
      */
     public function update(Request $request, Kind $kind)
     {
-        return $kind->update($request->validate([
+        if($kind->update($request->validate([
             'name' => 'required',
             'description' => 'required'
-        ]));
+        ])))
+            return response(['message' => "Kind successfully updated!"], 200)
+                ->header('Content-Type', 'application/json');
+        else
+            abort('500');
     }
 
     /**

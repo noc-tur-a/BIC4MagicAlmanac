@@ -51,6 +51,7 @@ class SpellController extends Controller
             'name' => 'required',
             'quote' => 'required',
             'description' => 'required',
+            //'kind_id' => 'required|exists:App\kind_id'
             'kind_id' => 'required|exists:App\Kind,id'
         ]));
     }

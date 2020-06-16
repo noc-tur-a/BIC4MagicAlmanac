@@ -4,7 +4,7 @@
 @section('content')
     <section class="section">
         <div class="container">
-            <kind-edit></kind-edit>
+            <kind-edit :current-kind="{{ $kind }}"></kind-edit>
         </div>
     </section>
 @endsection

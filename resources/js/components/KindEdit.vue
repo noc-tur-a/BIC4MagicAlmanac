@@ -52,10 +52,12 @@
                 kinds: []
             }
         },
-        created: function(){
-            this.currentSlug = window.location.pathname.split('/kind/').pop().split('/edit')[0];
-            console.log(this.currentSlug);
+        props: ['currentKind'],
 
+        created: function(){
+            //this.currentSlug = window.location.pathname.split('/kind/').pop().split('/edit')[0];
+            console.log(this.currentKind);
+            //location.pathname = "urga";
             this.fetchKinds(this.link);
 
         },
@@ -72,10 +74,15 @@
               //return str;
             },
             editKind() {
-                this.currentSlug = this.prepareSlugName(this.kind.name);
+                //this.currentSlug = this.prepareSlugName(this.kind.name);
                 this.kind.put(`/kind/${this.kind.slug}`)
                 .then(res => {
                     if(res === 1) {
+                       /* if(this.currentSlug !== this.prepareSlugName(this.kind.name)) {
+                            this.currentSlug = this.prepareSlugName(this.kind.name);
+                            window.location.pathname = "kind/" + this.currentSlug + "/edit";
+                        }*/
+
                         this.returnMessageTheme = "returnMessageSuccess";
                         this.returnMessage = "Update erfolgreich";
                     } else {
@@ -100,7 +107,7 @@
                             this.kind.updated_at = this.kinds[i].updated_at;
                         }
                     }
-                    });
+                });
             }
         }
     }

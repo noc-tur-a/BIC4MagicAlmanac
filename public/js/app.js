@@ -1954,30 +1954,53 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: "test",
+  //name: "test",
   data: function data() {
     return {
-      status: 'Critical'
+      returnMessage: "",
+      returnMessageTheme: "",
+      kind: new Form({
+        name: "",
+        description: ""
+      })
     };
   },
   methods: {
-    changeStatus: function changeStatus() {
-      if (this.status === 'Critical') {
-        this.status = 'Normal';
-      } else {
-        this.status = 'Critical';
-      }
+    createKind: function createKind() {
+      var _this = this;
+
+      this.kind.post("/kind/").then(function (res) {
+        _this.returnMessage = "Kind erfolgreich erstellt!";
+        _this.returnMessageTheme = "returnMessageSuccess";
+      })["catch"](function (error) {
+        _this.returnMessage = error.name[0];
+        _this.returnMessageTheme = "returnMessageFailed";
+      });
     }
   }
 });
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/KindEdit.vue?vue&type=script&lang=js&":
-/*!*******************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/KindEdit.vue?vue&type=script&lang=js& ***!
-  \*******************************************************************************************************************************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/KindEdit2.vue?vue&type=script&lang=js&":
+/*!********************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/KindEdit2.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -2021,64 +2044,37 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      currentSlug: "",
-      link: '/list/kind',
       returnMessage: "",
       returnMessageTheme: "",
       kind: new Form({
-        id: "",
-        slug: "",
-        name: "",
-        description: "",
-        updated_at: "",
-        created_at: ""
-      }),
-      kinds: []
+        id: this.currentKind.id,
+        slug: this.currentKind.slug,
+        name: this.currentKind.name,
+        description: this.currentKind.description,
+        updated_at: this.currentKind.updated_at,
+        created_at: this.currentKind.created_at
+      })
     };
   },
-  created: function created() {
-    this.currentSlug = window.location.pathname.split('/kind/').pop().split('/edit')[0];
-    console.log(this.currentSlug);
-    this.fetchKinds(this.link);
-  },
+  props: ['currentKind'],
   methods: {
-    prepareSlugName: function prepareSlugName(str) {
-      return str.trim().replace(/[- ]{2,}/, "-").replace(/[^a-zA-Z- ]/mg, "").replace(/^[- ]+/mg, "").replace(/[- ]+$/mg, "").trim().replace(/ /mg, "-").toLowerCase(); //return str;
-    },
     editKind: function editKind() {
       var _this = this;
 
-      this.currentSlug = this.prepareSlugName(this.kind.name);
+      this.returnMessageTheme = "";
       this.kind.put("/kind/".concat(this.kind.slug)).then(function (res) {
-        if (res === 1) {
+        if (res.message === "Kind successfully updated!") {
+          _this.returnMessage = res.message;
           _this.returnMessageTheme = "returnMessageSuccess";
-          _this.returnMessage = "Update erfolgreich";
+          window.location.href = "/kind?success";
         } else {
+          _this.returnMessage = res.message;
           _this.returnMessageTheme = "returnMessageFailed";
-          _this.returnMessage = "Update fehlgeschlagen";
+          console.log("Message: Unexpected Error!");
         }
-
-        _this.fetchKinds(_this.link);
-      });
-    },
-    fetchKinds: function fetchKinds(link) {
-      var _this2 = this;
-
-      fetch(link).then(function (res) {
-        return res.json();
-      }).then(function (res) {
-        _this2.kinds = res;
-
-        for (var i = 0; i < _this2.kinds.length; i++) {
-          if (_this2.kinds[i].slug === _this2.currentSlug) {
-            _this2.kind.id = _this2.kinds[i].id;
-            _this2.kind.slug = _this2.kinds[i].slug;
-            _this2.kind.name = _this2.kinds[i].name;
-            _this2.kind.description = _this2.kinds[i].description;
-            _this2.kind.created_at = _this2.kinds[i].created_at;
-            _this2.kind.updated_at = _this2.kinds[i].updated_at;
-          }
-        }
+      })["catch"](function (error) {
+        _this.returnMessage = error.name[0];
+        _this.returnMessageTheme = "returnMessageFailed";
       });
     }
   }
@@ -2156,20 +2152,47 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       kinds: [],
-      //link: "kind/" + this.kind.slug + "/edit",
       kindLink: "kind/",
       editLink: "/edit",
-      isActive: false
+      //isActive: false,
+      returnMessage: "Test Message",
+      returnMessageTheme: ""
     };
   },
   created: function created() {
     var _this = this;
 
-    //TODO Maybe use the fetch method?
+    if (window.location.search === "?success") {
+      this.returnMessage = "Kind erfolgreich upgedated";
+      this.returnMessageTheme = "returnMessageSuccess";
+      window.setTimeout(function () {
+        var element = document.getElementById("returnMessageSpan");
+        console.log(element);
+        var op = 1; // initial opacity
+
+        var timer = setInterval(function () {
+          if (op <= 0.1) {
+            clearInterval(timer);
+            element.style.display = 'none';
+          }
+
+          element.style.opacity = op;
+          element.style.filter = 'alpha(opacity=' + op * 100 + ")";
+          op -= op * 0.1;
+        }, 20);
+      }, 4000);
+    } //TODO Maybe use the fetch method?
+
+
     axios.get('/list/kind').then(function (response) {
       _this.kinds = response.data;
     })["catch"](function (error) {
@@ -2178,6 +2201,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     showSpells: function showSpells(e) {
+      //TODO VUE CLASSBINDING
       var elementRow = e.target.parentNode.nextElementSibling;
       var elementRowParent = e.target.parentNode;
 
@@ -2192,11 +2216,215 @@ __webpack_require__.r(__webpack_exports__);
         elementRow.classList.add("maTableOuterRowShow");
         elementRowParent.classList.add("maTableOuterRowParentShow");
       }
-    } //END showSpells
+    },
+    //END showSpells
+    deleteKind: function deleteKind(slug) {
+      console.log("DELETE KIND"); //e.stopPropagation();
 
+      console.log('Slug: ' + slug); //this.kind.delete("/kind/")
+    }
   } //END Methods
 
 }); //End export default
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/SpellCreate.vue?vue&type=script&lang=js&":
+/*!**********************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/SpellCreate.vue?vue&type=script&lang=js& ***!
+  \**********************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      returnMessage: "",
+      returnMessageTheme: "",
+      spell: new Form({
+        name: "",
+        quote: "",
+        description: "",
+        kind_id: ""
+      })
+    };
+  },
+  props: ['currentKinds'],
+  created: function created() {},
+  methods: {
+    createSpell: function createSpell() {
+      var _this = this;
+
+      this.spell.post("/spell/").then(function (res) {
+        _this.returnMessage = "Spell erfolgreich erstellt!";
+        _this.returnMessageTheme = "returnMessageSuccess";
+      })["catch"](function (error) {
+        if (error !== undefined) {
+          _this.returnMessage = error.kind_id[0];
+          _this.returnMessageTheme = "returnMessageFailed";
+        } else {
+          _this.returnMessage = "Unexpected Error";
+          _this.returnMessageTheme = "returnMessageFailed";
+        } //console.log("Message: " + message);
+
+      });
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/SpellList.vue?vue&type=script&lang=js&":
+/*!********************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/SpellList.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: "test",
+  data: function data() {
+    return {
+      spells: []
+    };
+  },
+  created: function created() {
+    var _this = this;
+
+    //TODO Maybe use the fetch method?
+    axios.get('/list/spell').then(function (response) {
+      _this.spells = response.data;
+      console.log(_this.spells);
+    })["catch"](function (error) {
+      console.log(error);
+    });
+  },
+  methods: {
+    showKind: function showKind(e) {
+      console.log("showKind"); //TODO VUE CLASSBINDING
+
+      var elementRow = e.target.parentNode.nextElementSibling;
+      var elementRowParent = e.target.parentNode;
+
+      if (!elementRow.classList.contains("maTableOuterRowHidden")) {
+        return;
+      }
+
+      if (elementRow.classList.contains("maTableOuterRowShow")) {
+        elementRow.classList.remove("maTableOuterRowShow");
+        elementRowParent.classList.remove("maTableOuterRowParentShow");
+      } else {
+        elementRow.classList.add("maTableOuterRowShow");
+        elementRowParent.classList.add("maTableOuterRowParentShow");
+      }
+    }
+  }
+});
 
 /***/ }),
 
@@ -19921,16 +20149,100 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _vm._v("\n    kind Create\n    "),
-    _c("p", [_vm._v("Server status: " + _vm._s(_vm.status))]),
-    _vm._v(" "),
-    _c("button", { on: { click: _vm.changeStatus } }, [
-      _vm._v("Change Status")
-    ]),
-    _vm._v(" "),
-    _c("p", [_vm._v("Some text")])
-  ])
+  return _c(
+    "div",
+    [
+      _c("h1", [_vm._v("Create Kind")]),
+      _vm._v(" "),
+      [
+        _c(
+          "form",
+          {
+            attrs: { id: "kindForm" },
+            on: {
+              submit: function($event) {
+                $event.preventDefault()
+              }
+            }
+          },
+          [
+            _c("label", { attrs: { for: "name" } }, [_vm._v("Name:")]),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.kind.name,
+                  expression: "kind.name"
+                }
+              ],
+              staticClass: "inputText",
+              attrs: { type: "text", id: "name", name: "name" },
+              domProps: { value: _vm.kind.name },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.kind, "name", $event.target.value)
+                }
+              }
+            }),
+            _vm._v(" "),
+            _c("br"),
+            _vm._v(" "),
+            _c(
+              "label",
+              { staticClass: "labelTextArea", attrs: { for: "description" } },
+              [_vm._v("Description:")]
+            ),
+            _vm._v(" "),
+            _c("textarea", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.kind.description,
+                  expression: "kind.description"
+                }
+              ],
+              staticClass: "inputTextarea",
+              attrs: { id: "description", name: "description" },
+              domProps: { value: _vm.kind.description },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.kind, "description", $event.target.value)
+                }
+              }
+            }),
+            _vm._v(" "),
+            _c("br"),
+            _vm._v(" "),
+            _c("input", {
+              staticClass: "submit",
+              attrs: { type: "submit", name: "submit", value: "Create" },
+              on: {
+                click: function($event) {
+                  return _vm.createKind()
+                }
+              }
+            }),
+            _vm._v(" "),
+            _c(
+              "span",
+              { staticClass: "returnMessage", class: _vm.returnMessageTheme },
+              [_vm._v(_vm._s(_vm.returnMessage))]
+            )
+          ]
+        )
+      ]
+    ],
+    2
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -19939,10 +20251,10 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/KindEdit.vue?vue&type=template&id=ae438bae&scoped=true&":
-/*!***********************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/KindEdit.vue?vue&type=template&id=ae438bae&scoped=true& ***!
-  \***********************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/KindEdit2.vue?vue&type=template&id=7300b459&scoped=true&":
+/*!************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/KindEdit2.vue?vue&type=template&id=7300b459&scoped=true& ***!
+  \************************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -20181,6 +20493,16 @@ var render = function() {
   return _c("div", { staticClass: "ma-content" }, [
     _c("h1", [_vm._v("List of kinds")]),
     _vm._v(" "),
+    _c(
+      "span",
+      {
+        staticClass: "ma-returnMessage",
+        class: _vm.returnMessageTheme,
+        attrs: { id: "returnMessageSpan" }
+      },
+      [_vm._v(_vm._s(_vm.returnMessage))]
+    ),
+    _vm._v(" "),
     _vm.kinds && _vm.kinds.length
       ? _c(
           "table",
@@ -20199,7 +20521,9 @@ var render = function() {
                   [
                     _c("td", [_vm._v(_vm._s(kind.name))]),
                     _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s(kind.description))]),
+                    _c("td", { staticClass: "fixedTableTd" }, [
+                      _vm._v(_vm._s(kind.description))
+                    ]),
                     _vm._v(" "),
                     _c("td", [
                       _vm._v(
@@ -20233,7 +20557,19 @@ var render = function() {
                         },
                         [_vm._v("Edit")]
                       )
-                    ])
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "td",
+                      {
+                        on: {
+                          click: function($event) {
+                            return _vm.deleteKind(kind.slug)
+                          }
+                        }
+                      },
+                      [_vm._v("Delete")]
+                    )
                   ]
                 ),
                 _vm._v(" "),
@@ -20242,67 +20578,75 @@ var render = function() {
                       "tr",
                       { staticClass: "maTableOuterRow maTableOuterRowHidden " },
                       [
-                        _c("td", { attrs: { colspan: "5" } }, [
-                          _c(
-                            "table",
-                            {
-                              staticClass: "ma-tableInner",
-                              class: { maTableInnerShow: _vm.isActive }
-                            },
-                            [
-                              _c("thead", [
-                                _c("tr", [
-                                  _c("td", { attrs: { colspan: "5" } }, [
-                                    _c("h3", [
+                        _c(
+                          "td",
+                          {
+                            staticClass: "maTableOuterRowFixedSize",
+                            attrs: { colspan: "6" }
+                          },
+                          [
+                            _c(
+                              "table",
+                              { staticClass: "ma-tableInner" },
+                              [
+                                _c("thead", [
+                                  _c("tr", [
+                                    _c("td", { attrs: { colspan: "5" } }, [
+                                      _c("h3", [
+                                        _vm._v(
+                                          "Spells of " +
+                                            _vm._s(kind.name) +
+                                            " (Total: " +
+                                            _vm._s(kind.spells.length) +
+                                            " )"
+                                        )
+                                      ])
+                                    ])
+                                  ]),
+                                  _vm._v(" "),
+                                  _vm._m(1, true)
+                                ]),
+                                _vm._v(" "),
+                                _vm._l(kind.spells, function(spell) {
+                                  return _c("tr", [
+                                    _c("td", [_vm._v(_vm._s(spell.name))]),
+                                    _vm._v(" "),
+                                    _c("td", [_vm._v(_vm._s(spell.quote))]),
+                                    _vm._v(" "),
+                                    _c(
+                                      "td",
+                                      { staticStyle: { width: "70%" } },
+                                      [_vm._v(_vm._s(spell.description))]
+                                    ),
+                                    _vm._v(" "),
+                                    _c("td", [
                                       _vm._v(
-                                        "Spells of " +
-                                          _vm._s(kind.name) +
-                                          " (Total: " +
-                                          _vm._s(kind.spells.length) +
-                                          " )"
+                                        _vm._s(
+                                          _vm._f("moment")(
+                                            spell.created_at,
+                                            "DD.MM.YYYY - hh:mm:ss"
+                                          )
+                                        )
+                                      )
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("td", [
+                                      _vm._v(
+                                        _vm._s(
+                                          _vm._f("moment")(
+                                            spell.updated_at,
+                                            "DD.MM.YYYY - hh:mm:ss"
+                                          )
+                                        )
                                       )
                                     ])
                                   ])
-                                ]),
-                                _vm._v(" "),
-                                _vm._m(1, true)
-                              ]),
-                              _vm._v(" "),
-                              _vm._l(kind.spells, function(spell) {
-                                return _c("tr", [
-                                  _c("td", [_vm._v(_vm._s(spell.name))]),
-                                  _vm._v(" "),
-                                  _c("td", [_vm._v(_vm._s(spell.quote))]),
-                                  _vm._v(" "),
-                                  _c("td", [_vm._v(_vm._s(spell.description))]),
-                                  _vm._v(" "),
-                                  _c("td", [
-                                    _vm._v(
-                                      _vm._s(
-                                        _vm._f("moment")(
-                                          spell.created_at,
-                                          "DD.MM.YYYY - hh:mm:ss"
-                                        )
-                                      )
-                                    )
-                                  ]),
-                                  _vm._v(" "),
-                                  _c("td", [
-                                    _vm._v(
-                                      _vm._s(
-                                        _vm._f("moment")(
-                                          spell.updated_at,
-                                          "DD.MM.YYYY - hh:mm:ss"
-                                        )
-                                      )
-                                    )
-                                  ])
-                                ])
-                              })
-                            ],
-                            2
-                          )
-                        ])
+                                })
+                              ],
+                              2
+                            )
+                          ]
+                        )
                       ]
                     )
                   : _vm._e()
@@ -20310,13 +20654,9 @@ var render = function() {
             }),
             _vm._v(" "),
             _c("tfoot", [
-              _c("tr", [
-                _c("td", [
+              _c("tr", { staticClass: "ma-tableRowOuterFooter" }, [
+                _c("td", { attrs: { colspan: "6" } }, [
                   _vm._v("Total Kinds: " + _vm._s(_vm.kinds.length) + " ")
-                ]),
-                _vm._v(" "),
-                _c("td", { attrs: { colspan: "3" } }, [
-                  _vm._v("Total Spells: ")
                 ])
               ])
             ])
@@ -20332,16 +20672,18 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("thead", [
-      _c("tr", [
-        _c("th", [_vm._v("Name")]),
+      _c("tr", { staticClass: "ma-tableRowOuterHeader" }, [
+        _c("th", { staticStyle: { width: "10%" } }, [_vm._v("Name")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Description")]),
+        _c("th", { staticStyle: { width: "60%" } }, [_vm._v("Description")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Created")]),
+        _c("th", { staticStyle: { width: "10%" } }, [_vm._v("Created")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Updated")]),
+        _c("th", { staticStyle: { width: "10%" } }, [_vm._v("Updated")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Edit")])
+        _c("th", { staticStyle: { width: "5%" } }, [_vm._v("Edit")]),
+        _vm._v(" "),
+        _c("th", { staticStyle: { width: "5%" } }, [_vm._v("Delete")])
       ])
     ])
   },
@@ -20359,6 +20701,398 @@ var staticRenderFns = [
       _c("th", [_vm._v("Created")]),
       _vm._v(" "),
       _c("th", [_vm._v("Updated")])
+    ])
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/SpellCreate.vue?vue&type=template&id=0ac14929&scoped=true&":
+/*!**************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/SpellCreate.vue?vue&type=template&id=0ac14929&scoped=true& ***!
+  \**************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    [
+      _c("h1", [_vm._v("Create spell")]),
+      _vm._v(" "),
+      [
+        _c(
+          "form",
+          {
+            attrs: { id: "kindForm" },
+            on: {
+              submit: function($event) {
+                $event.preventDefault()
+              }
+            }
+          },
+          [
+            _c("label", { attrs: { for: "name" } }, [_vm._v("Name:")]),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.spell.name,
+                  expression: "spell.name"
+                }
+              ],
+              staticClass: "inputText",
+              attrs: { type: "text", id: "name", name: "name" },
+              domProps: { value: _vm.spell.name },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.spell, "name", $event.target.value)
+                }
+              }
+            }),
+            _vm._v(" "),
+            _c("br"),
+            _vm._v(" "),
+            _c(
+              "label",
+              { staticClass: "labelTextArea", attrs: { for: "quote" } },
+              [_vm._v("Quote:")]
+            ),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.spell.quote,
+                  expression: "spell.quote"
+                }
+              ],
+              staticClass: "inputText",
+              attrs: { id: "quote", name: "quote" },
+              domProps: { value: _vm.spell.quote },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.spell, "quote", $event.target.value)
+                }
+              }
+            }),
+            _vm._v(" "),
+            _c("br"),
+            _vm._v(" "),
+            _c(
+              "label",
+              { staticClass: "labelTextArea", attrs: { for: "kindId" } },
+              [_vm._v("Kind Id:")]
+            ),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.spell.kind_id,
+                  expression: "spell.kind_id"
+                }
+              ],
+              staticClass: "inputText",
+              attrs: { id: "kindId", name: "kindId" },
+              domProps: { value: _vm.spell.kind_id },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.spell, "kind_id", $event.target.value)
+                }
+              }
+            }),
+            _vm._v(" "),
+            _c("br"),
+            _vm._v(" "),
+            _c(
+              "label",
+              { staticClass: "labelTextArea", attrs: { for: "description" } },
+              [_vm._v("Description:")]
+            ),
+            _vm._v(" "),
+            _c("textarea", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.spell.description,
+                  expression: "spell.description"
+                }
+              ],
+              staticClass: "inputTextarea",
+              attrs: { id: "description", name: "description" },
+              domProps: { value: _vm.spell.description },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.spell, "description", $event.target.value)
+                }
+              }
+            }),
+            _vm._v(" "),
+            _c("br"),
+            _vm._v(" "),
+            _c("input", {
+              staticClass: "submit",
+              attrs: { type: "submit", name: "submit", value: "Create" },
+              on: {
+                click: function($event) {
+                  return _vm.createSpell()
+                }
+              }
+            }),
+            _vm._v(" "),
+            _c(
+              "span",
+              { staticClass: "returnMessage", class: _vm.returnMessageTheme },
+              [_vm._v(_vm._s(_vm.returnMessage))]
+            )
+          ]
+        )
+      ]
+    ],
+    2
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/SpellList.vue?vue&type=template&id=5e73990b&scoped=true&":
+/*!************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/SpellList.vue?vue&type=template&id=5e73990b&scoped=true& ***!
+  \************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("h1", [_vm._v("List spells")]),
+    _vm._v(" "),
+    _vm.spells && _vm.spells.length
+      ? _c(
+          "table",
+          { staticClass: "ma-tableOuter" },
+          [
+            _vm._m(0),
+            _vm._v(" "),
+            _vm._l(_vm.spells, function(spell) {
+              return [
+                _c(
+                  "tr",
+                  {
+                    staticClass: "maTableOuterRow",
+                    on: { click: _vm.showKind }
+                  },
+                  [
+                    _c("td", [_vm._v(_vm._s(spell.name))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(spell.quote))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(spell.description))]),
+                    _vm._v(" "),
+                    _c("td", [
+                      _vm._v(
+                        _vm._s(
+                          _vm._f("moment")(
+                            spell.created_at,
+                            "DD.MM.YYYY - hh:mm:ss"
+                          )
+                        )
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("td", [
+                      _vm._v(
+                        _vm._s(
+                          _vm._f("moment")(
+                            spell.updated_at,
+                            "DD.MM.YYYY - hh:mm:ss"
+                          )
+                        )
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v("Edit")]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v("Delete")])
+                  ]
+                ),
+                _vm._v(" "),
+                spell.kind
+                  ? _c(
+                      "tr",
+                      { staticClass: "maTableOuterRow maTableOuterRowHidden " },
+                      [
+                        _c(
+                          "td",
+                          {
+                            staticClass: "maTableOuterRowFixedSize",
+                            attrs: { colspan: "7" }
+                          },
+                          [
+                            _c(
+                              "table",
+                              {
+                                staticClass: "ma-tableInner",
+                                staticStyle: { width: "100%" }
+                              },
+                              [
+                                _vm._m(1, true),
+                                _vm._v(" "),
+                                _c("tr", [
+                                  _c(
+                                    "td",
+                                    { staticClass: "ma-tableInnerTd_10" },
+                                    [_vm._v(_vm._s(spell.kind.name))]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "td",
+                                    { staticClass: "ma-tableInnerTd_70" },
+                                    [_vm._v(_vm._s(spell.kind.description))]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "td",
+                                    { staticClass: "ma-tableInnerTd_10" },
+                                    [
+                                      _vm._v(
+                                        _vm._s(
+                                          _vm._f("moment")(
+                                            spell.kind.created_at,
+                                            "DD.MM.YYYY - hh:mm:ss"
+                                          )
+                                        )
+                                      )
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "td",
+                                    { staticClass: "ma-tableInnerTd_10" },
+                                    [
+                                      _vm._v(
+                                        _vm._s(
+                                          _vm._f("moment")(
+                                            spell.kind.updated_at,
+                                            "DD.MM.YYYY - hh:mm:ss"
+                                          )
+                                        )
+                                      )
+                                    ]
+                                  )
+                                ])
+                              ]
+                            )
+                          ]
+                        )
+                      ]
+                    )
+                  : _vm._e()
+              ]
+            }),
+            _vm._v(" "),
+            _vm._m(2)
+          ],
+          2
+        )
+      : _vm._e()
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", { staticClass: "ma-tableRowOuterHeader" }, [
+        _c("th", [_vm._v("Name")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Quote")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Description")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Created")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Updated")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Edit")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Delete")])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("td", { attrs: { colspan: "4" } }, [
+          _c("h3", [_vm._v("Spells of "), _vm._v(" (Total: "), _vm._v(" )")])
+        ])
+      ]),
+      _vm._v(" "),
+      _c("tr", [
+        _c("th", { staticClass: "ma-tableInnerTd_10" }, [_vm._v("Name")]),
+        _vm._v(" "),
+        _c("th", { staticClass: "ma-tableInnerTd_70" }, [
+          _vm._v("Description")
+        ]),
+        _vm._v(" "),
+        _c("th", { staticClass: "ma-tableInnerTd_10" }, [_vm._v("Created")]),
+        _vm._v(" "),
+        _c("th", { staticClass: "ma-tableInnerTd_10" }, [_vm._v("Updated")])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("tfoot", [
+      _c("tr", { staticClass: "ma-tableRowOuterFooter" }, [
+        _c("td", [_vm._v("Total Kinds: ")]),
+        _vm._v(" "),
+        _c("td", { attrs: { colspan: "7" } }, [_vm._v("Total Spells: ")])
+      ])
     ])
   }
 ]
@@ -37435,9 +38169,13 @@ window.Vue = vue__WEBPACK_IMPORTED_MODULE_0___default.a;
 
 Vue.component('example-component', __webpack_require__(/*! ./components/ExampleComponent.vue */ "./resources/js/components/ExampleComponent.vue")["default"]);
 Vue.component('query-message', __webpack_require__(/*! ./components/base/QueryMessage.vue */ "./resources/js/components/base/QueryMessage.vue")["default"]);
-Vue.component('kind-list', __webpack_require__(/*! ./components/KindList.vue */ "./resources/js/components/KindList.vue")["default"]);
-Vue.component('kind-edit', __webpack_require__(/*! ./components/KindEdit.vue */ "./resources/js/components/KindEdit.vue")["default"]);
+Vue.component('kind-list', __webpack_require__(/*! ./components/KindList.vue */ "./resources/js/components/KindList.vue")["default"]); //Vue.component('kind-list', require('./components/KindList2.vue').default);
+//Vue.component('kind-edit', require('./components/KindEdit.vue').default);
+
+Vue.component('kind-edit', __webpack_require__(/*! ./components/KindEdit2.vue */ "./resources/js/components/KindEdit2.vue")["default"]);
 Vue.component('kind-create', __webpack_require__(/*! ./components/KindCreate.vue */ "./resources/js/components/KindCreate.vue")["default"]);
+Vue.component('spell-list', __webpack_require__(/*! ./components/SpellList.vue */ "./resources/js/components/SpellList.vue")["default"]);
+Vue.component('spell-create', __webpack_require__(/*! ./components/SpellCreate.vue */ "./resources/js/components/SpellCreate.vue")["default"]);
 Vue.component('test', __webpack_require__(/*! ./components/test.vue */ "./resources/js/components/test.vue")["default"]);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -37647,17 +38385,17 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/components/KindEdit.vue":
-/*!**********************************************!*\
-  !*** ./resources/js/components/KindEdit.vue ***!
-  \**********************************************/
+/***/ "./resources/js/components/KindEdit2.vue":
+/*!***********************************************!*\
+  !*** ./resources/js/components/KindEdit2.vue ***!
+  \***********************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _KindEdit_vue_vue_type_template_id_ae438bae_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./KindEdit.vue?vue&type=template&id=ae438bae&scoped=true& */ "./resources/js/components/KindEdit.vue?vue&type=template&id=ae438bae&scoped=true&");
-/* harmony import */ var _KindEdit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./KindEdit.vue?vue&type=script&lang=js& */ "./resources/js/components/KindEdit.vue?vue&type=script&lang=js&");
+/* harmony import */ var _KindEdit2_vue_vue_type_template_id_7300b459_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./KindEdit2.vue?vue&type=template&id=7300b459&scoped=true& */ "./resources/js/components/KindEdit2.vue?vue&type=template&id=7300b459&scoped=true&");
+/* harmony import */ var _KindEdit2_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./KindEdit2.vue?vue&type=script&lang=js& */ "./resources/js/components/KindEdit2.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -37667,50 +38405,50 @@ __webpack_require__.r(__webpack_exports__);
 /* normalize component */
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _KindEdit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _KindEdit_vue_vue_type_template_id_ae438bae_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _KindEdit_vue_vue_type_template_id_ae438bae_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _KindEdit2_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _KindEdit2_vue_vue_type_template_id_7300b459_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _KindEdit2_vue_vue_type_template_id_7300b459_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
-  "ae438bae",
+  "7300b459",
   null
   
 )
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/components/KindEdit.vue"
+component.options.__file = "resources/js/components/KindEdit2.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
 
-/***/ "./resources/js/components/KindEdit.vue?vue&type=script&lang=js&":
-/*!***********************************************************************!*\
-  !*** ./resources/js/components/KindEdit.vue?vue&type=script&lang=js& ***!
-  \***********************************************************************/
+/***/ "./resources/js/components/KindEdit2.vue?vue&type=script&lang=js&":
+/*!************************************************************************!*\
+  !*** ./resources/js/components/KindEdit2.vue?vue&type=script&lang=js& ***!
+  \************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_KindEdit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./KindEdit.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/KindEdit.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_KindEdit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_KindEdit2_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./KindEdit2.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/KindEdit2.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_KindEdit2_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
-/***/ "./resources/js/components/KindEdit.vue?vue&type=template&id=ae438bae&scoped=true&":
-/*!*****************************************************************************************!*\
-  !*** ./resources/js/components/KindEdit.vue?vue&type=template&id=ae438bae&scoped=true& ***!
-  \*****************************************************************************************/
+/***/ "./resources/js/components/KindEdit2.vue?vue&type=template&id=7300b459&scoped=true&":
+/*!******************************************************************************************!*\
+  !*** ./resources/js/components/KindEdit2.vue?vue&type=template&id=7300b459&scoped=true& ***!
+  \******************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_KindEdit_vue_vue_type_template_id_ae438bae_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./KindEdit.vue?vue&type=template&id=ae438bae&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/KindEdit.vue?vue&type=template&id=ae438bae&scoped=true&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_KindEdit_vue_vue_type_template_id_ae438bae_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_KindEdit2_vue_vue_type_template_id_7300b459_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./KindEdit2.vue?vue&type=template&id=7300b459&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/KindEdit2.vue?vue&type=template&id=7300b459&scoped=true&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_KindEdit2_vue_vue_type_template_id_7300b459_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_KindEdit_vue_vue_type_template_id_ae438bae_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_KindEdit2_vue_vue_type_template_id_7300b459_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
@@ -37780,6 +38518,144 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_KindList_vue_vue_type_template_id_ccd3da86_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_KindList_vue_vue_type_template_id_ccd3da86_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/SpellCreate.vue":
+/*!*************************************************!*\
+  !*** ./resources/js/components/SpellCreate.vue ***!
+  \*************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _SpellCreate_vue_vue_type_template_id_0ac14929_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./SpellCreate.vue?vue&type=template&id=0ac14929&scoped=true& */ "./resources/js/components/SpellCreate.vue?vue&type=template&id=0ac14929&scoped=true&");
+/* harmony import */ var _SpellCreate_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./SpellCreate.vue?vue&type=script&lang=js& */ "./resources/js/components/SpellCreate.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _SpellCreate_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _SpellCreate_vue_vue_type_template_id_0ac14929_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _SpellCreate_vue_vue_type_template_id_0ac14929_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  "0ac14929",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/SpellCreate.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/SpellCreate.vue?vue&type=script&lang=js&":
+/*!**************************************************************************!*\
+  !*** ./resources/js/components/SpellCreate.vue?vue&type=script&lang=js& ***!
+  \**************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_SpellCreate_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./SpellCreate.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/SpellCreate.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_SpellCreate_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/SpellCreate.vue?vue&type=template&id=0ac14929&scoped=true&":
+/*!********************************************************************************************!*\
+  !*** ./resources/js/components/SpellCreate.vue?vue&type=template&id=0ac14929&scoped=true& ***!
+  \********************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SpellCreate_vue_vue_type_template_id_0ac14929_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./SpellCreate.vue?vue&type=template&id=0ac14929&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/SpellCreate.vue?vue&type=template&id=0ac14929&scoped=true&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SpellCreate_vue_vue_type_template_id_0ac14929_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SpellCreate_vue_vue_type_template_id_0ac14929_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/SpellList.vue":
+/*!***********************************************!*\
+  !*** ./resources/js/components/SpellList.vue ***!
+  \***********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _SpellList_vue_vue_type_template_id_5e73990b_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./SpellList.vue?vue&type=template&id=5e73990b&scoped=true& */ "./resources/js/components/SpellList.vue?vue&type=template&id=5e73990b&scoped=true&");
+/* harmony import */ var _SpellList_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./SpellList.vue?vue&type=script&lang=js& */ "./resources/js/components/SpellList.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _SpellList_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _SpellList_vue_vue_type_template_id_5e73990b_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _SpellList_vue_vue_type_template_id_5e73990b_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  "5e73990b",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/SpellList.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/SpellList.vue?vue&type=script&lang=js&":
+/*!************************************************************************!*\
+  !*** ./resources/js/components/SpellList.vue?vue&type=script&lang=js& ***!
+  \************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_SpellList_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./SpellList.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/SpellList.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_SpellList_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/SpellList.vue?vue&type=template&id=5e73990b&scoped=true&":
+/*!******************************************************************************************!*\
+  !*** ./resources/js/components/SpellList.vue?vue&type=template&id=5e73990b&scoped=true& ***!
+  \******************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SpellList_vue_vue_type_template_id_5e73990b_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./SpellList.vue?vue&type=template&id=5e73990b&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/SpellList.vue?vue&type=template&id=5e73990b&scoped=true&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SpellList_vue_vue_type_template_id_5e73990b_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SpellList_vue_vue_type_template_id_5e73990b_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

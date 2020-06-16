@@ -11771,6 +11771,7 @@ h1 {
   font-size: 1.4em;
   font-weight: bold;
   padding: 10px 20px;
+  display: inline-block;
 }
 
 h3 {
@@ -11803,15 +11804,34 @@ h3 {
   background-color: #dddddd;
 }
 
+.ma-tableRowOuterHeader th {
+  background-color: #00b89c;
+}
+
+.ma-tableRowOuterHeader th:first-child {
+  border-radius: 15px 0 0 0;
+}
+
+.ma-tableRowOuterHeader th:last-child {
+  border-radius: 0 15px 0 0;
+}
+
+.ma-tableRowOuterFooter td {
+  background-color: #00b89c;
+}
+
+.ma-tableRowOuterFooter td:first-child {
+  border-radius: 0 0 0 15px;
+}
+
+.ma-tableRowOuterFooter td:last-child {
+  border-radius: 0 0 15px 0;
+}
+
 .ma-tableOuter th,
 td {
   padding: 5px 10px;
   border-bottom: 1px solid #000;
-}
-
-.ma-tableOuter td:first-child,
-.ma-tableOuter td:nth-last-child(-n+2) {
-  white-space: nowrap;
 }
 
 .ma-tableOuter th {
@@ -11827,13 +11847,20 @@ td {
 }
 
 .ma-tableInner {
+  width: 100%;
   background-color: #fff;
   border: 1px solid #363636;
   border-radius: 15px;
   border-collapse: separate;
-  white-space: normal;
   cursor: default;
-  display: inherit;
+}
+
+.ma-tableInnerTd_10 {
+  width: 10%;
+}
+
+.ma-tableInnerTd_70 {
+  width: 70%;
 }
 
 .ma-tableInner tr:last-child td {
@@ -11842,6 +11869,27 @@ td {
 
 .ma-tableInner thead tr td {
   border-bottom: 0;
+}
+
+.ma-returnMessage {
+  border-radius: 5px;
+  padding: 0 0 2px 4px;
+  font-size: 1.1em;
+  margin-top: 10px;
+  width: 300px;
+  border: 1px solid #363636;
+  color: #000;
+  display: none;
+}
+
+.ma-returnMessageSuccess {
+  background-color: #00b89c;
+  display: inline-block;
+}
+
+.returnMessageFailed {
+  background-color: #ff0000;
+  display: inline-block;
 }
 
 label {

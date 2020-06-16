@@ -26,8 +26,14 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 Vue.component('query-message', require('./components/base/QueryMessage.vue').default);
 
 Vue.component('kind-list', require('./components/KindList.vue').default);
-Vue.component('kind-edit', require('./components/KindEdit.vue').default);
+//Vue.component('kind-list', require('./components/KindList2.vue').default);
+
+//Vue.component('kind-edit', require('./components/KindEdit.vue').default);
+Vue.component('kind-edit', require('./components/KindEdit2.vue').default);
 Vue.component('kind-create', require('./components/KindCreate.vue').default);
+
+Vue.component('spell-list', require('./components/SpellList.vue').default);
+Vue.component('spell-create', require('./components/SpellCreate.vue').default);
 
 Vue.component('test', require('./components/test.vue').default);
 

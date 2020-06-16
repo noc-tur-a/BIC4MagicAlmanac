@@ -4,7 +4,9 @@
 @section('content')
     <section class="section">
         <div class="container">
-            <h1>Create spell</h1>
+            {{--<spell-create :current-kinds="{{ $spell }} "></spell-create>--}}
+            <spell-create></spell-create>
+
         </div>
     </section>
 @endsection

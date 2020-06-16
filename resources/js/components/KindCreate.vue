@@ -1,24 +1,53 @@
 <template>
-    <div>
-        kind Create
-        <p>Server status: {{ status }}</p>
-        <button @click="changeStatus">Change Status</button>
-        <p>Some text</p>
-    </div>
+        <div>
+            <h1>Create Kind</h1>
+            <template>
+                <form id="kindForm" @submit.prevent>
+
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" v-model="kind.name" class="inputText">
+                    <br>
+
+                    <label for="description" class="labelTextArea">Description:</label>
+                    <textarea id="description" name="description" v-model="kind.description" class="inputTextarea"></textarea>
+                    <br>
+
+                    <input type="submit" name="submit" value="Create" class="submit" @click="createKind()">
+                    <span class="returnMessage"  :class="returnMessageTheme">{{ returnMessage }}</span>
+
+                </form>
+            </template>
+        </div>
+
 </template>
 
 <script>
     export default {
-        name: "test",
+        //name: "test",
         data: function() {
             return {
+                returnMessage: "",
+                returnMessageTheme: "",
+                kind: new Form({
+                    name: "",
+                    description: ""
+                }),
 
-                status: 'Critical'
+
             }
         },
         methods: {
-            changeStatus() {
-                if(this.status === 'Critical') { this.status = 'Normal'; } else { this.status = 'Critical'; }
+
+            createKind() {
+                this.kind.post("/kind/")
+                    .then(res => {
+                        this.returnMessage = "Kind erfolgreich erstellt!";
+                        this.returnMessageTheme = "returnMessageSuccess";
+                    })
+                    .catch(error => {
+                        this.returnMessage = error.name[0];
+                        this.returnMessageTheme = "returnMessageFailed";
+                    });
             }
         }
     }
