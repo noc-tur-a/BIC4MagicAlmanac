@@ -81,7 +81,8 @@ class SpellController extends Controller
      */
     public function edit(Spell $spell)
     {
-        return view('spell.edit', compact($spell));
+        //return view('spell.edit', compact($spell));
+        return view('spell.edit', compact('spell'));
     }
 
     /**

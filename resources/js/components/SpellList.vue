@@ -70,15 +70,39 @@
 
 <script>
     export default {
-        name: "test",
-        data: function() {
+        data() {
             return {
-
                 spells: [],
-
+                spellLink: "spell/",
+                editLink: "/edit",
+                returnMessage: "Test Message",
+                returnMessageTheme: "",
             }
         },
         created() {
+
+            if(window.location.search === "?success") {
+                this.returnMessage = "Spell erfolgreich upgedated";
+                this.returnMessageTheme = "returnMessageSuccess";
+
+                window.setTimeout(function(){
+
+                    let element = document.getElementById("returnMessageSpan");
+                    console.log(element);
+                    let op = 1;  // initial opacity
+                    let timer = setInterval(function () {
+                        if (op <= 0.1){
+                            clearInterval(timer);
+                            element.style.display = 'none';
+                        }
+                        element.style.opacity = op;
+                        element.style.filter = 'alpha(opacity=' + op * 100 + ")";
+                        op -= op * 0.1;
+                    }, 20);
+
+                }, 4000);
+            }
+
 
             //TODO Maybe use the fetch method?
             axios.get('/list/spell')
@@ -90,6 +114,7 @@
                     console.log(error);
                 })
         },
+
         methods: {
             showKind(e) {
                 console.log("showKind");
