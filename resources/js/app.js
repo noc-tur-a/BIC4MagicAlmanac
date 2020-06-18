@@ -34,6 +34,8 @@ Vue.component('kind-create', require('./components/KindCreate.vue').default);
 
 Vue.component('spell-list', require('./components/SpellList.vue').default);
 Vue.component('spell-create', require('./components/SpellCreate.vue').default);
+Vue.component('spell-search', require('./components/SpellSearch.vue').default);
+Vue.component('spell-show', require('./components/SpellShow.vue').default);
 
 Vue.component('test', require('./components/test.vue').default);
 

@@ -4,7 +4,6 @@
 
         <template v-for="currentKind in currentKinds">
             <p>{{ currentKind.name }}</p>
-
         </template>
 
     </div>

@@ -5,11 +5,11 @@
                 <form id="kindForm" @submit.prevent>
 
                     <label for="name">Name:</label>
-                    <input type="text" id="name" name="name" v-model="kind.name" class="inputText">
+                    <input type="text" id="name" name="name" v-model.trim="kind.name" class="inputText">
                     <br>
 
                     <label for="description" class="labelTextArea">Description:</label>
-                    <textarea id="description" name="description" v-model="kind.description" class="inputTextarea"></textarea>
+                    <textarea id="description" name="description" v-model.trim="kind.description" class="inputTextarea"></textarea>
                     <br>
 
                     <input type="submit" name="submit" value="Create" class="submit" @click="createKind()">

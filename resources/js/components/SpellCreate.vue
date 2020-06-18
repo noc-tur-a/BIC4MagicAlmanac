@@ -5,16 +5,21 @@
             <form id="kindForm" @submit.prevent>
 
                 <label for="name">Name:</label>
-                <input type="text" id="name" name="name" v-model="spell.name" class="inputText">
+                <input type="text" id="name" name="name" v-model.trim="spell.name" class="inputText">
                 <br>
                 <label for="quote" class="labelTextArea">Quote:</label>
-                <input id="quote" name="quote" v-model="spell.quote" class="inputText">
+                <input id="quote" name="quote" v-model.trim="spell.quote" class="inputText">
                 <br>
                 <label for="kindId" class="labelTextArea">Kind Id:</label>
-                <input id="kindId" name="kindId" v-model="spell.kind_id" class="inputText">
+                <select id="kindId" v-model="optionValue">
+                    <template v-for="currentKind in currentKinds">
+                        <option v-bind:value="{ value: currentKind.id }" >{{ currentKind.name }}</option>
+                    </template>
+                </select>
+                <span>Selected: {{ optionValue.value }}</span>
                 <br>
                 <label for="description" class="labelTextArea">Description:</label>
-                <textarea id="description" name="description" v-model="spell.description" class="inputTextarea"></textarea>
+                <textarea id="description" name="description" v-model.trim="spell.description" class="inputTextarea"></textarea>
                 <br>
 
                 <input type="submit" name="submit" value="Create" class="submit" @click="createSpell()">
@@ -22,9 +27,7 @@
 
             </form>
 
-           <!-- <template v-for="currentKind in currentKinds">
-                <p>{{ currentKind.name }}</p>
-            </template>-->
+
         </template>
     </div>
 </template>
@@ -35,12 +38,12 @@
             return {
                 returnMessage: "",
                 returnMessageTheme: "",
+                optionValue: "",
                 spell: new Form({
                     name: "",
                     quote: "",
                     description: "",
                     kind_id: ""
-
                 }),
             }
         },
@@ -52,6 +55,11 @@
         },
         methods: {
             createSpell() {
+                this.spell.kind_id = this.optionValue.value;
+                console.log(this.spell.name);
+                console.log(this.spell.quote);
+                console.log(this.spell.description);
+                console.log(this.spell.kind_id);
                 this.spell.post("/spell/")
                     .then(res => {
                         this.returnMessage = "Spell erfolgreich erstellt!";

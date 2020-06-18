@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Kind;
 use App\Spell;
 use Illuminate\Http\Request;
 
@@ -24,9 +25,11 @@ class SpellController extends Controller
      */
     public function index()
     {
+
         $spell = Spell::all()->load('kind');
 
         return view('spell.index', compact('spell'));
+
     }
 
     /**
@@ -36,7 +39,10 @@ class SpellController extends Controller
      */
     public function create()
     {
-        return view('spell.create');
+        $kinds = Kind::all()->load('spells');
+
+        return view('spell.create', compact('kinds'));
+        //return view('spell.create');
     }
 
     /**
@@ -112,9 +118,15 @@ class SpellController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function search()
+    public function search(Spell $spells)
     {
-        return view('spell.search');
+        $spells = Spell::all()->load('kind');
+
+        return view('spell.search', compact('spells'));
+        //$spell = Spell::all()->load('kinds');
+
+        //return view('spell.search', compact('spell'));
+        //return view('spell.search');
     }
 
     /**
