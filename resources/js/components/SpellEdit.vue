@@ -7,6 +7,7 @@
             <form @submit.prevent>
                 <input type="hidden" name="id" v-model="spell.id">
                 <input type = "hidden" name="slug" v-model="spell.slug">
+                <input type = "hidden" name="kind_id" v-model="spell.kind_id">
 
                 <label>Updated:</label>
                 <span class="inputText">{{ spell.updated_at | moment("DD.MM.YYYY - HH:mm:ss") }}</span>
@@ -46,6 +47,7 @@
                 returnMessage: "",
                 returnMessageTheme: "",
                 spell: new Form({
+                    kind_id: this.currentSpell.kind_id,
                     id: this.currentSpell.id,
                     slug: this.currentSpell.slug,
                     name: this.currentSpell.name,
@@ -60,13 +62,25 @@
 
         methods: {
             editSpell() {
+                console.log("Hello dis is inside editSpell()");
+                console.log("name: " + this.spell.name);
+                console.log("kind id: " + this.currentSpell.kind_id);
+                console.log("id " + this.currentSpell.id);
+                console.log("slug " + this.currentSpell.slug);
+                console.log("name " + this.currentSpell.name);
+                console.log(this.currentSpell.quote);
+                console.log(this.currentSpell.description);
+                console.log(this.currentSpell.updated_at);
+                console.log(this.currentSpell.created_at);
+
                 this.returnMessageTheme = "";
+                //TODO check error handling
                 this.spell.put(`/spell/${this.spell.slug}`)
                     .then(res => {
-                        if (res.message === "Spell successfully updated!") {
+                        if (res === 1) {
                             this.returnMessage = res.message;
                             this.returnMessageTheme = "returnMessageSuccess";
-                            window.localStorage.href = "/spell?success";
+                            window.location.href = "/spell?success";
                         } else {
                             this.returnMessage = res.message;
                             this.returnMessageTheme = "returnMessageFailed";

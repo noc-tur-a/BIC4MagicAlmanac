@@ -1,6 +1,7 @@
 <template>
     <div>
         <h1>List spells</h1>
+        <span id="returnMessageSpan" class="ma-returnMessage"  :class="returnMessageTheme">{{ returnMessage }}</span>
         <table class="ma-tableOuter" v-if="spells && spells.length">
             <thead>
             <tr class="ma-tableRowOuterHeader">
@@ -22,8 +23,8 @@
                     <td>{{ spell.created_at | moment("DD.MM.YYYY - hh:mm:ss") }}</td>
                     <td>{{ spell.updated_at | moment("DD.MM.YYYY - hh:mm:ss") }}</td>
                     <!-- kind/SLUGNAME/edit -->
-                    <!--<td><a :href="kindLink + kind.slug + editLink">Edit</a></td>-->
-                    <td>Edit</td>
+                    <td><a :href="spellLink + spell.slug + editLink">Edit</a></td>
+                    <!-- <td>Edit</td> -->
                     <!--<td @click="deleteKind(kind.slug)">Delete {{ kind.slug }}</td>-->
                     <td>Delete</td>
                 </tr>
@@ -75,7 +76,7 @@
                 spells: [],
                 spellLink: "spell/",
                 editLink: "/edit",
-                returnMessage: "Test Message",
+                returnMessage: "dis is a test",
                 returnMessageTheme: "",
             }
         },
