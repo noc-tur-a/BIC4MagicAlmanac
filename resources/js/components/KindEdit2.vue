@@ -72,7 +72,7 @@
                     this.returnMessage = error.name[0];
                     this.returnMessageTheme = "returnMessageFailed";
                 });
-            },
+            }
 
         }
     }

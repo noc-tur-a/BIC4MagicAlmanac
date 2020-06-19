@@ -31,23 +31,29 @@
                     <td colspan="7" class="maTableOuterRowFixedSize">
                         <!--<table class="ma-tableInner" v-bind:class="{maTableInnerShow: isActive}">-->
                         <table class="ma-tableInner" style="width: 100%;">
+                            <colgroup>
+                                <col class="ma-Td_Width_10">
+                                <col class="ma-Td_Width_70">
+                                <col class="ma-Td_Width_10">
+                                <col class="ma-Td_Width_10">
+                            </colgroup>
                             <thead>
                             <tr>
                                 <td colspan="4"><h3>Spell of Kind {{ spell.kind.name }}</h3></td>
                             </tr>
                             <tr>
-                                <th class="ma-tableInnerTd_10">Name</th>
-                                <th class="ma-tableInnerTd_70">Description</th>
-                                <th class="ma-tableInnerTd_10">Created</th>
-                                <th class="ma-tableInnerTd_10">Updated</th>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Created</th>
+                                <th>Updated</th>
                             </tr>
                             </thead>
                             <!--<tr v-for="kind in spell.kind">-->
                             <tr>
-                                <td class="ma-tableInnerTd_10">{{ spell.kind.name }}</td>
-                                <td class="ma-tableInnerTd_70">{{ spell.kind.description }}</td>
-                                <td class="ma-tableInnerTd_10">{{ spell.kind.created_at | moment("DD.MM.YYYY - hh:mm:ss") }}</td>
-                                <td class="ma-tableInnerTd_10">{{ spell.kind.updated_at | moment("DD.MM.YYYY - hh:mm:ss") }}</td>
+                                <td>{{ spell.kind.name }}</td>
+                                <td>{{ spell.kind.description }}</td>
+                                <td>{{ spell.kind.created_at | moment("DD.MM.YYYY - hh:mm:ss") }}</td>
+                                <td>{{ spell.kind.updated_at | moment("DD.MM.YYYY - hh:mm:ss") }}</td>
                             </tr>
                         </table>
                     </td>
@@ -103,8 +109,7 @@
                 }, 4000);
             }
 
-            //TODO check how the axios error handling works in detail
-            axios.get('/list/spell')
+            axios.get('/list/spell', {timeout: 10000 })
                 .then(response => {
                     this.spells = response.data
                     this.totalSpells = this.spells.length;

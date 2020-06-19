@@ -11855,11 +11855,19 @@ td {
   cursor: default;
 }
 
-.ma-tableInnerTd_10 {
+.ma-Td_Width_5 {
+  width: 5%;
+}
+
+.ma-Td_Width_10 {
   width: 10%;
 }
 
-.ma-tableInnerTd_70 {
+.ma-Td_Width_60 {
+  width: 60%;
+}
+
+.ma-Td_Width_70 {
   width: 70%;
 }
 
@@ -11876,7 +11884,6 @@ td {
   padding: 2px 4px 2px 4px;
   font-size: 1.1em;
   margin-top: 10px;
-  /*width: 400px;*/
   border: 1px solid #363636;
   color: #000;
   display: none;
@@ -11912,10 +11919,10 @@ span {
 
 .returnMessage {
   border-radius: 5px;
-  padding: 0 0 0 4px;
+  padding: 0 4px 0 4px;
   font-size: 1.2em;
   margin-top: 10px;
-  width: 300px;
+  /*width: 300px;*/
   border: 1px solid #363636;
   color: #000;
   display: none;

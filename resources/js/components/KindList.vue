@@ -5,25 +5,32 @@
         <span id="returnMessageSpan" class="ma-returnMessage"  :class="returnMessageTheme">{{ returnMessage }}</span>
 
         <table class="ma-tableOuter" v-if="kinds && kinds.length">
+            <colgroup>
+                <col class="ma-Td_Width_10">
+                <col class="ma-Td_Width_60">
+                <col class="ma-Td_Width_10">
+                <col class="ma-Td_Width_10">
+                <col class="ma-Td_Width_5">
+                <col class="ma-Td_Width_5">
+            </colgroup>
             <thead>
                 <tr class="ma-tableRowOuterHeader">
-                    <!--TODO width are important, write them as css class and not as inline styles-->
-                    <th style="width: 10%;">Name</th>
-                    <th style="width: 60%;">Description</th>
-                    <th style="width: 10%;">Created</th>
-                    <th style="width: 10%;">Updated</th>
-                    <th style="width: 5%;">Edit</th>
-                    <th style="width: 5%;">Delete</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Created</th>
+                    <th>Updated</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
                 </tr>
             </thead>
             <template v-for="kind in kinds">
             <tr class="maTableOuterRow" @click="showSpells">
                 <!-- kind/SLUGNAME/edit -->
-                <td >{{ kind.name }}</td>
+                <td>{{ kind.name }}</td>
                 <td class="fixedTableTd">{{ kind.description }}</td>
-                <td >{{ kind.created_at | moment("DD.MM.YYYY - hh:mm:ss") }}</td>
-                <td >{{ kind.updated_at | moment("DD.MM.YYYY - hh:mm:ss") }}</td>
-                <td ><a :href="kindLink + kind.slug + editLink">Edit</a></td>
+                <td>{{ kind.created_at | moment("DD.MM.YYYY - hh:mm:ss") }}</td>
+                <td>{{ kind.updated_at | moment("DD.MM.YYYY - hh:mm:ss") }}</td>
+                <td><a :href="kindLink + kind.slug + editLink">Edit</a></td>
                 <td class="ma-delete" @click.stop="deleteKind(kind.slug)">Delete</td>
             </tr>
             <tr class="maTableOuterRow maTableOuterRowHidden " v-if="kind.spells && kind.spells.length">
@@ -44,8 +51,8 @@
                             </tr>
                         </thead>
                         <tr v-for="spell in kind.spells">
-                               <td>{{ spell.name }}</td>
-                               <td>{{ spell.quote }}</td>
+                            <td>{{ spell.name }}</td>
+                            <td>{{ spell.quote }}</td>
                             <td style="width: 70%;">{{ spell.description }}</td>
                             <td>{{ spell.created_at | moment("DD.MM.YYYY - hh:mm:ss") }}</td>
                             <td>{{ spell.updated_at | moment("DD.MM.YYYY - hh:mm:ss") }}</td>
@@ -106,8 +113,7 @@
                 }, 4000);
             }
 
-            //TODO check how the axios error handling works in detail
-            axios.get('/list/kind')
+            axios.get('/list/kind', {timeout: 10000 })
                 .then(response => {
                     this.kinds = response.data;
                     this.totalKinds = this.kinds.length;
@@ -154,7 +160,6 @@
 
                         if(hasSpellsInside === 1) {
                             event.target.parentNode.nextElementSibling.remove();
-                            hasSpellsInside = 1;
                         }
                         event.target.parentNode.remove();
                         this.totalKinds--;

@@ -29,7 +29,6 @@
 </template>
 
 <script>
-    //TODO needed to alter the SpellController
     export default {
 
         data: function() {
@@ -69,7 +68,6 @@
                     }
                 }
 
-                console.log("result length: " + this.results.length);
                 if(this.results.length === 0) {
                     this.returnMessage = "Leider keine Spells gefunden.";
                     this.returnMessageTheme = "returnMessageFailed";

@@ -1968,6 +1968,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   //name: "test",
   data: function data() {
@@ -1985,12 +1987,31 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       this.kind.post("/kind/").then(function (res) {
-        _this.returnMessage = "Kind erfolgreich erstellt!";
-        _this.returnMessageTheme = "returnMessageSuccess";
+        _this.returnMessage = "Kind successfully created";
+        _this.returnMessageTheme = "returnMessageSuccess"; //this.kind.reset();
+        //we use build in javascipt method to reset the form because the provided reset function
+        //from Form.js doesn't handle the required="required" correctly
+
+        document.getElementById("kindForm").reset();
       })["catch"](function (error) {
-        _this.returnMessage = error.name[0];
-        _this.returnMessageTheme = "returnMessageFailed";
+        if (error) {
+          if (error.name) {
+            _this.returnMessage = error.name[0];
+          }
+
+          if (error.description) {
+            _this.returnMessage = error.description[0];
+          }
+        } else {
+          _this.returnMessage = "Unexpected Error: Kind with same name may already exist";
+        }
+
+        _this.returnMessageTheme = "returnMessageFailed"; //this.kind.reset();
       });
+    },
+    removeMessage: function removeMessage() {
+      this.returnMessage = "";
+      this.returnMessageTheme = "";
     }
   }
 });
@@ -2158,6 +2179,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2196,10 +2224,11 @@ __webpack_require__.r(__webpack_exports__);
           op -= op * 0.1;
         }, 20);
       }, 4000);
-    } //TODO check how the axios error handling works in detail
+    }
 
-
-    axios.get('/list/kind').then(function (response) {
+    axios.get('/list/kind', {
+      timeout: 10000
+    }).then(function (response) {
       _this.kinds = response.data;
       _this.totalKinds = _this.kinds.length;
     })["catch"](function (error) {
@@ -2242,7 +2271,6 @@ __webpack_require__.r(__webpack_exports__);
 
           if (hasSpellsInside === 1) {
             event.target.parentNode.nextElementSibling.remove();
-            hasSpellsInside = 1;
           }
 
           event.target.parentNode.remove();
@@ -2357,6 +2385,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2378,23 +2409,31 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       this.spell.kind_id = this.optionValue.value;
-      console.log(this.spell.name);
-      console.log(this.spell.quote);
-      console.log(this.spell.description);
-      console.log(this.spell.kind_id);
       this.spell.post("/spell/").then(function (res) {
         _this.returnMessage = "Spell erfolgreich erstellt!";
         _this.returnMessageTheme = "returnMessageSuccess";
+        document.getElementById("spellForm").reset();
       })["catch"](function (error) {
-        if (error !== undefined) {
-          _this.returnMessage = error.kind_id[0];
-          _this.returnMessageTheme = "returnMessageFailed";
+        if (error) {
+          if (error.name) {
+            _this.returnMessage = error.name[0];
+          } else if (error.quote) {
+            _this.returnMessage = error.quote[0];
+          } else if (error.kind_id) {
+            _this.returnMessage = error.kind_id[0];
+          } else if (error.description) {
+            _this.returnMessage = error.description[0];
+          }
         } else {
-          _this.returnMessage = "Unexpected Error";
-          _this.returnMessageTheme = "returnMessageFailed";
-        } //console.log("Message: " + message);
+          _this.returnMessage = "Unexpected Error: Spell with same name may already exist";
+        }
 
+        _this.returnMessageTheme = "returnMessageFailed";
       });
+    },
+    removeMessage: function removeMessage() {
+      this.returnMessage = "";
+      this.returnMessageTheme = "";
     }
   }
 });
@@ -2578,6 +2617,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2616,10 +2661,11 @@ __webpack_require__.r(__webpack_exports__);
           op -= op * 0.1;
         }, 20);
       }, 4000);
-    } //TODO check how the axios error handling works in detail
+    }
 
-
-    axios.get('/list/spell').then(function (response) {
+    axios.get('/list/spell', {
+      timeout: 10000
+    }).then(function (response) {
       _this.spells = response.data;
       _this.totalSpells = _this.spells.length;
     })["catch"](function (error) {
@@ -2706,7 +2752,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//TODO needed to alter the SpellController
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2737,8 +2782,6 @@ __webpack_require__.r(__webpack_exports__);
           j++;
         }
       }
-
-      console.log("result length: " + this.results.length);
 
       if (this.results.length === 0) {
         this.returnMessage = "Leider keine Spells gefunden.";
@@ -21289,108 +21332,131 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    [
-      _c("h1", [_vm._v("Create Kind")]),
-      _vm._v(" "),
+  return _c("div", [
+    _c("h1", [_vm._v("Create Kind")]),
+    _vm._v(" "),
+    _c(
+      "form",
+      {
+        attrs: { id: "kindForm" },
+        on: {
+          submit: function($event) {
+            $event.preventDefault()
+          }
+        }
+      },
       [
-        _c(
-          "form",
-          {
-            attrs: { id: "kindForm" },
-            on: {
-              submit: function($event) {
-                $event.preventDefault()
-              }
+        _c("label", { attrs: { for: "name" } }, [_vm._v("Name:")]),
+        _vm._v(" "),
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model.trim",
+              value: _vm.kind.name,
+              expression: "kind.name",
+              modifiers: { trim: true }
             }
+          ],
+          staticClass: "inputText",
+          attrs: {
+            required: "required",
+            type: "text",
+            id: "name",
+            name: "name"
           },
-          [
-            _c("label", { attrs: { for: "name" } }, [_vm._v("Name:")]),
-            _vm._v(" "),
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model.trim",
-                  value: _vm.kind.name,
-                  expression: "kind.name",
-                  modifiers: { trim: true }
-                }
-              ],
-              staticClass: "inputText",
-              attrs: { type: "text", id: "name", name: "name" },
-              domProps: { value: _vm.kind.name },
-              on: {
-                input: function($event) {
-                  if ($event.target.composing) {
-                    return
-                  }
-                  _vm.$set(_vm.kind, "name", $event.target.value.trim())
-                },
-                blur: function($event) {
-                  return _vm.$forceUpdate()
-                }
+          domProps: { value: _vm.kind.name },
+          on: {
+            focus: function($event) {
+              $event.stopPropagation()
+              return _vm.removeMessage($event)
+            },
+            keypress: function($event) {
+              $event.stopPropagation()
+              return _vm.removeMessage($event)
+            },
+            input: function($event) {
+              if ($event.target.composing) {
+                return
               }
-            }),
-            _vm._v(" "),
-            _c("br"),
-            _vm._v(" "),
-            _c(
-              "label",
-              { staticClass: "labelTextArea", attrs: { for: "description" } },
-              [_vm._v("Description:")]
-            ),
-            _vm._v(" "),
-            _c("textarea", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model.trim",
-                  value: _vm.kind.description,
-                  expression: "kind.description",
-                  modifiers: { trim: true }
-                }
-              ],
-              staticClass: "inputTextarea",
-              attrs: { id: "description", name: "description" },
-              domProps: { value: _vm.kind.description },
-              on: {
-                input: function($event) {
-                  if ($event.target.composing) {
-                    return
-                  }
-                  _vm.$set(_vm.kind, "description", $event.target.value.trim())
-                },
-                blur: function($event) {
-                  return _vm.$forceUpdate()
-                }
+              _vm.$set(_vm.kind, "name", $event.target.value.trim())
+            },
+            blur: function($event) {
+              return _vm.$forceUpdate()
+            }
+          }
+        }),
+        _vm._v(" "),
+        _c("br"),
+        _vm._v(" "),
+        _c(
+          "label",
+          { staticClass: "labelTextArea", attrs: { for: "description" } },
+          [_vm._v("Description:")]
+        ),
+        _vm._v(" "),
+        _c("textarea", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model.trim",
+              value: _vm.kind.description,
+              expression: "kind.description",
+              modifiers: { trim: true }
+            }
+          ],
+          staticClass: "inputTextarea",
+          attrs: {
+            required: "required",
+            id: "description",
+            name: "description"
+          },
+          domProps: { value: _vm.kind.description },
+          on: {
+            focus: function($event) {
+              $event.stopPropagation()
+              return _vm.removeMessage($event)
+            },
+            keypress: function($event) {
+              $event.stopPropagation()
+              return _vm.removeMessage($event)
+            },
+            input: function($event) {
+              if ($event.target.composing) {
+                return
               }
-            }),
-            _vm._v(" "),
-            _c("br"),
-            _vm._v(" "),
-            _c("input", {
-              staticClass: "submit",
-              attrs: { type: "submit", name: "submit", value: "Create" },
-              on: {
-                click: function($event) {
-                  return _vm.createKind()
-                }
-              }
-            }),
-            _vm._v(" "),
-            _c(
-              "span",
-              { staticClass: "returnMessage", class: _vm.returnMessageTheme },
-              [_vm._v(_vm._s(_vm.returnMessage))]
-            )
-          ]
+              _vm.$set(_vm.kind, "description", $event.target.value.trim())
+            },
+            blur: function($event) {
+              return _vm.$forceUpdate()
+            }
+          }
+        }),
+        _vm._v(" "),
+        _c("br"),
+        _vm._v(" "),
+        _c("input", {
+          staticClass: "submit",
+          attrs: { type: "submit", name: "submit", value: "Create" },
+          on: {
+            click: function($event) {
+              return _vm.createKind()
+            }
+          }
+        }),
+        _vm._v(" "),
+        _c(
+          "span",
+          {
+            staticClass: "returnMessage",
+            class: _vm.returnMessageTheme,
+            staticStyle: { "white-space": "nowrap" }
+          },
+          [_vm._v(_vm._s(_vm.returnMessage))]
         )
       ]
-    ],
-    2
-  )
+    )
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -21668,6 +21734,8 @@ var render = function() {
           [
             _vm._m(0),
             _vm._v(" "),
+            _vm._m(1),
+            _vm._v(" "),
             _vm._l(_vm.kinds, function(kind) {
               return [
                 _c(
@@ -21764,7 +21832,7 @@ var render = function() {
                                     ])
                                   ]),
                                   _vm._v(" "),
-                                  _vm._m(1, true)
+                                  _vm._m(2, true)
                                 ]),
                                 _vm._v(" "),
                                 _vm._l(kind.spells, function(spell) {
@@ -21831,19 +21899,37 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
+    return _c("colgroup", [
+      _c("col", { staticClass: "ma-Td_Width_10" }),
+      _vm._v(" "),
+      _c("col", { staticClass: "ma-Td_Width_60" }),
+      _vm._v(" "),
+      _c("col", { staticClass: "ma-Td_Width_10" }),
+      _vm._v(" "),
+      _c("col", { staticClass: "ma-Td_Width_10" }),
+      _vm._v(" "),
+      _c("col", { staticClass: "ma-Td_Width_5" }),
+      _vm._v(" "),
+      _c("col", { staticClass: "ma-Td_Width_5" })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
     return _c("thead", [
       _c("tr", { staticClass: "ma-tableRowOuterHeader" }, [
-        _c("th", { staticStyle: { width: "10%" } }, [_vm._v("Name")]),
+        _c("th", [_vm._v("Name")]),
         _vm._v(" "),
-        _c("th", { staticStyle: { width: "60%" } }, [_vm._v("Description")]),
+        _c("th", [_vm._v("Description")]),
         _vm._v(" "),
-        _c("th", { staticStyle: { width: "10%" } }, [_vm._v("Created")]),
+        _c("th", [_vm._v("Created")]),
         _vm._v(" "),
-        _c("th", { staticStyle: { width: "10%" } }, [_vm._v("Updated")]),
+        _c("th", [_vm._v("Updated")]),
         _vm._v(" "),
-        _c("th", { staticStyle: { width: "5%" } }, [_vm._v("Edit")]),
+        _c("th", [_vm._v("Edit")]),
         _vm._v(" "),
-        _c("th", { staticStyle: { width: "5%" } }, [_vm._v("Delete")])
+        _c("th", [_vm._v("Delete")])
       ])
     ])
   },
@@ -21979,7 +22065,7 @@ var render = function() {
         _c(
           "form",
           {
-            attrs: { id: "kindForm" },
+            attrs: { id: "spellForm" },
             on: {
               submit: function($event) {
                 $event.preventDefault()
@@ -22000,9 +22086,22 @@ var render = function() {
                 }
               ],
               staticClass: "inputText",
-              attrs: { type: "text", id: "name", name: "name" },
+              attrs: {
+                required: "required",
+                type: "text",
+                id: "name",
+                name: "name"
+              },
               domProps: { value: _vm.spell.name },
               on: {
+                focus: function($event) {
+                  $event.stopPropagation()
+                  return _vm.removeMessage($event)
+                },
+                keypress: function($event) {
+                  $event.stopPropagation()
+                  return _vm.removeMessage($event)
+                },
                 input: function($event) {
                   if ($event.target.composing) {
                     return
@@ -22034,9 +22133,17 @@ var render = function() {
                 }
               ],
               staticClass: "inputText",
-              attrs: { id: "quote", name: "quote" },
+              attrs: { required: "required", id: "quote", name: "quote" },
               domProps: { value: _vm.spell.quote },
               on: {
+                focus: function($event) {
+                  $event.stopPropagation()
+                  return _vm.removeMessage($event)
+                },
+                keypress: function($event) {
+                  $event.stopPropagation()
+                  return _vm.removeMessage($event)
+                },
                 input: function($event) {
                   if ($event.target.composing) {
                     return
@@ -22068,21 +22175,28 @@ var render = function() {
                     expression: "optionValue"
                   }
                 ],
-                attrs: { id: "kindId" },
+                staticClass: "inputText",
+                attrs: { id: "kindId", required: "required" },
                 on: {
-                  change: function($event) {
-                    var $$selectedVal = Array.prototype.filter
-                      .call($event.target.options, function(o) {
-                        return o.selected
-                      })
-                      .map(function(o) {
-                        var val = "_value" in o ? o._value : o.value
-                        return val
-                      })
-                    _vm.optionValue = $event.target.multiple
-                      ? $$selectedVal
-                      : $$selectedVal[0]
-                  }
+                  change: [
+                    function($event) {
+                      var $$selectedVal = Array.prototype.filter
+                        .call($event.target.options, function(o) {
+                          return o.selected
+                        })
+                        .map(function(o) {
+                          var val = "_value" in o ? o._value : o.value
+                          return val
+                        })
+                      _vm.optionValue = $event.target.multiple
+                        ? $$selectedVal
+                        : $$selectedVal[0]
+                    },
+                    function($event) {
+                      $event.stopPropagation()
+                      return _vm.removeMessage($event)
+                    }
+                  ]
                 }
               },
               [
@@ -22098,8 +22212,6 @@ var render = function() {
               ],
               2
             ),
-            _vm._v(" "),
-            _c("span", [_vm._v("Selected: " + _vm._s(_vm.optionValue.value))]),
             _vm._v(" "),
             _c("br"),
             _vm._v(" "),
@@ -22120,9 +22232,21 @@ var render = function() {
                 }
               ],
               staticClass: "inputTextarea",
-              attrs: { id: "description", name: "description" },
+              attrs: {
+                required: "required",
+                id: "description",
+                name: "description"
+              },
               domProps: { value: _vm.spell.description },
               on: {
+                focus: function($event) {
+                  $event.stopPropagation()
+                  return _vm.removeMessage($event)
+                },
+                keypress: function($event) {
+                  $event.stopPropagation()
+                  return _vm.removeMessage($event)
+                },
                 input: function($event) {
                   if ($event.target.composing) {
                     return
@@ -22576,6 +22700,8 @@ var render = function() {
                                 staticStyle: { width: "100%" }
                               },
                               [
+                                _vm._m(1, true),
+                                _vm._v(" "),
                                 _c("thead", [
                                   _c("tr", [
                                     _c("td", { attrs: { colspan: "4" } }, [
@@ -22588,51 +22714,37 @@ var render = function() {
                                     ])
                                   ]),
                                   _vm._v(" "),
-                                  _vm._m(1, true)
+                                  _vm._m(2, true)
                                 ]),
                                 _vm._v(" "),
                                 _c("tr", [
-                                  _c(
-                                    "td",
-                                    { staticClass: "ma-tableInnerTd_10" },
-                                    [_vm._v(_vm._s(spell.kind.name))]
-                                  ),
+                                  _c("td", [_vm._v(_vm._s(spell.kind.name))]),
                                   _vm._v(" "),
-                                  _c(
-                                    "td",
-                                    { staticClass: "ma-tableInnerTd_70" },
-                                    [_vm._v(_vm._s(spell.kind.description))]
-                                  ),
+                                  _c("td", [
+                                    _vm._v(_vm._s(spell.kind.description))
+                                  ]),
                                   _vm._v(" "),
-                                  _c(
-                                    "td",
-                                    { staticClass: "ma-tableInnerTd_10" },
-                                    [
-                                      _vm._v(
-                                        _vm._s(
-                                          _vm._f("moment")(
-                                            spell.kind.created_at,
-                                            "DD.MM.YYYY - hh:mm:ss"
-                                          )
+                                  _c("td", [
+                                    _vm._v(
+                                      _vm._s(
+                                        _vm._f("moment")(
+                                          spell.kind.created_at,
+                                          "DD.MM.YYYY - hh:mm:ss"
                                         )
                                       )
-                                    ]
-                                  ),
+                                    )
+                                  ]),
                                   _vm._v(" "),
-                                  _c(
-                                    "td",
-                                    { staticClass: "ma-tableInnerTd_10" },
-                                    [
-                                      _vm._v(
-                                        _vm._s(
-                                          _vm._f("moment")(
-                                            spell.kind.updated_at,
-                                            "DD.MM.YYYY - hh:mm:ss"
-                                          )
+                                  _c("td", [
+                                    _vm._v(
+                                      _vm._s(
+                                        _vm._f("moment")(
+                                          spell.kind.updated_at,
+                                          "DD.MM.YYYY - hh:mm:ss"
                                         )
                                       )
-                                    ]
-                                  )
+                                    )
+                                  ])
                                 ])
                               ]
                             )
@@ -22684,14 +22796,28 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
+    return _c("colgroup", [
+      _c("col", { staticClass: "ma-Td_Width_10" }),
+      _vm._v(" "),
+      _c("col", { staticClass: "ma-Td_Width_70" }),
+      _vm._v(" "),
+      _c("col", { staticClass: "ma-Td_Width_10" }),
+      _vm._v(" "),
+      _c("col", { staticClass: "ma-Td_Width_10" })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
     return _c("tr", [
-      _c("th", { staticClass: "ma-tableInnerTd_10" }, [_vm._v("Name")]),
+      _c("th", [_vm._v("Name")]),
       _vm._v(" "),
-      _c("th", { staticClass: "ma-tableInnerTd_70" }, [_vm._v("Description")]),
+      _c("th", [_vm._v("Description")]),
       _vm._v(" "),
-      _c("th", { staticClass: "ma-tableInnerTd_10" }, [_vm._v("Created")]),
+      _c("th", [_vm._v("Created")]),
       _vm._v(" "),
-      _c("th", { staticClass: "ma-tableInnerTd_10" }, [_vm._v("Updated")])
+      _c("th", [_vm._v("Updated")])
     ])
   }
 ]

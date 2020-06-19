@@ -1,22 +1,24 @@
 <template>
         <div>
             <h1>Create Kind</h1>
-            <template>
+
                 <form id="kindForm" @submit.prevent>
 
                     <label for="name">Name:</label>
-                    <input type="text" id="name" name="name" v-model.trim="kind.name" class="inputText">
+                    <input required="required" type="text" id="name" name="name" class="inputText"
+                           v-model.trim="kind.name"  @focus.stop="removeMessage" @keypress.stop="removeMessage">
                     <br>
 
                     <label for="description" class="labelTextArea">Description:</label>
-                    <textarea id="description" name="description" v-model.trim="kind.description" class="inputTextarea"></textarea>
+                    <textarea required="required" id="description" name="description" class="inputTextarea"
+                              v-model.trim="kind.description" @focus.stop="removeMessage" @keypress.stop="removeMessage"></textarea>
                     <br>
 
                     <input type="submit" name="submit" value="Create" class="submit" @click="createKind()">
-                    <span class="returnMessage"  :class="returnMessageTheme">{{ returnMessage }}</span>
-
+                    <span style="white-space: nowrap;" class="returnMessage" :class="returnMessageTheme">{{ returnMessage }}</span>
                 </form>
-            </template>
+
+
         </div>
 
 </template>
@@ -41,14 +43,31 @@
             createKind() {
                 this.kind.post("/kind/")
                     .then(res => {
-                        this.returnMessage = "Kind erfolgreich erstellt!";
+                        this.returnMessage = "Kind successfully created";
                         this.returnMessageTheme = "returnMessageSuccess";
+                        //this.kind.reset();
+                        //we use build in javascipt method to reset the form because the provided reset function
+                        //from Form.js doesn't handle the required="required" correctly
+                        document.getElementById("kindForm").reset();
+
                     })
                     .catch(error => {
-                        this.returnMessage = error.name[0];
+                        if(error) {
+                            if(error.name) { this.returnMessage = error.name[0]; }
+                            if(error.description) { this.returnMessage = error.description[0]; }
+                        } else {
+                            this.returnMessage = "Unexpected Error: Kind with same name may already exist";
+                        }
                         this.returnMessageTheme = "returnMessageFailed";
+                        //this.kind.reset();
                     });
+            },
+
+            removeMessage() {
+                this.returnMessage = ""
+                this.returnMessageTheme = "";
             }
+
         }
     }
 </script>
