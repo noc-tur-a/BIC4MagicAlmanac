@@ -74,7 +74,7 @@
                 console.log(this.currentSpell.created_at);
 
                 this.returnMessageTheme = "";
-                //TODO check error handling
+                //TODO check error handling, i.e. use wrong url, create spell that already exists
                 this.spell.put(`/spell/${this.spell.slug}`)
                     .then(res => {
                         if (res === 1) {

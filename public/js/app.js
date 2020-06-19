@@ -2061,6 +2061,7 @@ __webpack_require__.r(__webpack_exports__);
     editKind: function editKind() {
       var _this = this;
 
+      //TODO check error handling, i.e. use wrong url, create kind that already exists
       this.returnMessageTheme = "";
       this.kind.put("/kind/".concat(this.kind.slug)).then(function (res) {
         if (res.message === "Kind successfully updated!") {
@@ -2195,8 +2196,7 @@ __webpack_require__.r(__webpack_exports__);
           op -= op * 0.1;
         }, 20);
       }, 4000);
-    } //TODO Maybe use the fetch method?
-    //TODO error handling
+    } //TODO check how the axios error handling works in detail
 
 
     axios.get('/list/kind').then(function (response) {
@@ -2210,7 +2210,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     showSpells: function showSpells(e) {
-      //TODO VUE CLASSBINDING
+      //TODO VUE CLASSBINDING?
       var elementRow = e.target.parentNode.nextElementSibling;
       var elementRowParent = e.target.parentNode;
 
@@ -2228,7 +2228,6 @@ __webpack_require__.r(__webpack_exports__);
     },
     //END showSpells
     deleteKind: function deleteKind(slug) {
-      //TODO Delete the spells too
       this.kind.slug = slug;
       var hasSpellsInside = 0;
 
@@ -2485,7 +2484,7 @@ __webpack_require__.r(__webpack_exports__);
       console.log(this.currentSpell.description);
       console.log(this.currentSpell.updated_at);
       console.log(this.currentSpell.created_at);
-      this.returnMessageTheme = ""; //TODO check error handling
+      this.returnMessageTheme = ""; //TODO check error handling, i.e. use wrong url, create spell that already exists
 
       this.spell.put("/spell/".concat(this.spell.slug)).then(function (res) {
         if (res === 1) {
@@ -2617,8 +2616,7 @@ __webpack_require__.r(__webpack_exports__);
           op -= op * 0.1;
         }, 20);
       }, 4000);
-    } //TODO Maybe use the fetch method?
-    //TODO error handling
+    } //TODO check how the axios error handling works in detail
 
 
     axios.get('/list/spell').then(function (response) {
@@ -2632,7 +2630,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     showKind: function showKind(e) {
-      console.log("showKind"); //TODO VUE CLASSBINDING
+      console.log("showKind"); //TODO VUE CLASSBINDING?
 
       var elementRow = e.target.parentNode.nextElementSibling;
       var elementRowParent = e.target.parentNode;
@@ -2650,9 +2648,6 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     deleteSpell: function deleteSpell(slug) {
-      console.log("DELETE Slug");
-      console.log('Slug: ' + slug); //TODO Delete the spells too
-
       this.spellDelete.slug = slug;
 
       for (var i = 0; i < this.spells.length; i++) {
@@ -21725,6 +21720,7 @@ var render = function() {
                     _c(
                       "td",
                       {
+                        staticClass: "ma-delete",
                         on: {
                           click: function($event) {
                             $event.stopPropagation()
@@ -22548,6 +22544,7 @@ var render = function() {
                     _c(
                       "td",
                       {
+                        staticClass: "ma-delete",
                         on: {
                           click: function($event) {
                             $event.stopPropagation()

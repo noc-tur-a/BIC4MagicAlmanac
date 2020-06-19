@@ -25,7 +25,7 @@
                     <td>{{ spell.updated_at | moment("DD.MM.YYYY - hh:mm:ss") }}</td>
                     <!-- kind/SLUGNAME/edit -->
                     <td><a :href="spellLink + spell.slug + editLink">Edit</a></td>
-                    <td style="color:#FF0000" @click.stop="deleteSpell(spell.slug)">Delete</td>
+                    <td class="ma-delete" @click.stop="deleteSpell(spell.slug)">Delete</td>
                 </tr>
                 <tr class="maTableOuterRow maTableOuterRowHidden " v-if="spell.kind">
                     <td colspan="7" class="maTableOuterRowFixedSize">
@@ -103,9 +103,7 @@
                 }, 4000);
             }
 
-
-            //TODO Maybe use the fetch method?
-            //TODO error handling
+            //TODO check how the axios error handling works in detail
             axios.get('/list/spell')
                 .then(response => {
                     this.spells = response.data
@@ -121,7 +119,7 @@
         methods: {
             showKind(e) {
                 console.log("showKind");
-                //TODO VUE CLASSBINDING
+                //TODO VUE CLASSBINDING?
                 var elementRow = e.target.parentNode.nextElementSibling
                 var elementRowParent = e.target.parentNode;
 
@@ -138,10 +136,7 @@
             },
 
             deleteSpell(slug) {
-                console.log("DELETE Slug");
-                console.log('Slug: ' + slug);
 
-                //TODO Delete the spells too
                 this.spellDelete.slug = slug;
 
                 for(let i = 0; i < this.spells.length; i++ ) {

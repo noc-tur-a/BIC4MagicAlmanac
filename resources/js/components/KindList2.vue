@@ -29,7 +29,7 @@
             console.log("this.kinds :" + this.kinds);
             console.log(this.currentKinds);
 
-            /*//TODO Maybe use the fetch method?
+            /*
             axios.get('/list/kind')
                 .then(response => {
                     this.kinds = response.data

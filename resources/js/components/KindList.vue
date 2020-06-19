@@ -7,7 +7,7 @@
         <table class="ma-tableOuter" v-if="kinds && kinds.length">
             <thead>
                 <tr class="ma-tableRowOuterHeader">
-                    <!--TODO width are important-->
+                    <!--TODO width are important, write them as css class and not as inline styles-->
                     <th style="width: 10%;">Name</th>
                     <th style="width: 60%;">Description</th>
                     <th style="width: 10%;">Created</th>
@@ -24,7 +24,7 @@
                 <td >{{ kind.created_at | moment("DD.MM.YYYY - hh:mm:ss") }}</td>
                 <td >{{ kind.updated_at | moment("DD.MM.YYYY - hh:mm:ss") }}</td>
                 <td ><a :href="kindLink + kind.slug + editLink">Edit</a></td>
-                <td style="color:#FF0000" @click.stop="deleteKind(kind.slug)">Delete</td>
+                <td class="ma-delete" @click.stop="deleteKind(kind.slug)">Delete</td>
             </tr>
             <tr class="maTableOuterRow maTableOuterRowHidden " v-if="kind.spells && kind.spells.length">
                 <td colspan="6" class="maTableOuterRowFixedSize">
@@ -106,8 +106,7 @@
                 }, 4000);
             }
 
-            //TODO Maybe use the fetch method?
-            //TODO error handling
+            //TODO check how the axios error handling works in detail
             axios.get('/list/kind')
                 .then(response => {
                     this.kinds = response.data;
@@ -122,7 +121,7 @@
         methods: {
 
             showSpells(e) {
-                //TODO VUE CLASSBINDING
+                //TODO VUE CLASSBINDING?
                 var elementRow = e.target.parentNode.nextElementSibling
                 var elementRowParent = e.target.parentNode;
 
@@ -140,7 +139,6 @@
 
             deleteKind(slug) {
 
-                //TODO Delete the spells too
                 this.kind.slug = slug;
                 let hasSpellsInside = 0;
                 for(let i = 0; i < this.kinds.length; i++ ) {

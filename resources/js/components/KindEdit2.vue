@@ -52,6 +52,7 @@
         props: ['currentKind'],
         methods: {
             editKind() {
+                //TODO check error handling, i.e. use wrong url, create kind that already exists
                 this.returnMessageTheme = "";
                 this.kind.put(`/kind/${this.kind.slug}`)
                 .then(res => {
