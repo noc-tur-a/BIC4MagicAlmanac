@@ -88,7 +88,7 @@
         created() {
 
             if(window.location.search === "?success") {
-                this.returnMessage = "Spell erfolgreich upgedated";
+                this.returnMessage = "Spell successfully updated!";
                 this.returnMessageTheme = "returnMessageSuccess";
 
                 window.setTimeout(function(){

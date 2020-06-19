@@ -94,12 +94,24 @@ class SpellController extends Controller
      */
     public function update(Request $request, Spell $spell)
     {
-        return $spell->update($request->validate([
+        if($spell->update($request->validate([
+            'name' => 'required',
+            'quote' => 'required',
+            'description' => 'required',
+            'kind_id' => 'required|exists:App\Kind,id'
+            ])))
+            return response(['message' => "Spell successfully update!"], 200)
+                ->header('Content-Type', 'application/json');
+        else
+            abort('500');
+
+/*        return $spell->update($request->validate([
             'name' => 'required',
             'quote' => 'required',
             'description' => 'required',
             'kind_id' => 'required|exists:App\Kind,id'
         ]));
+*/
     }
 
     /**

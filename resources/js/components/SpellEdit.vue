@@ -46,7 +46,7 @@
             return {
                 returnMessage: "",
                 returnMessageTheme: "",
-                spell: new Form({
+                spell:{
                     kind_id: this.currentSpell.kind_id,
                     id: this.currentSpell.id,
                     slug: this.currentSpell.slug,
@@ -55,30 +55,27 @@
                     description: this.currentSpell.description,
                     updated_at: this.currentSpell.updated_at,
                     created_at: this.currentSpell.created_at
-                }),
+                },
             }
         },
         props: ['currentSpell'],
 
         methods: {
             editSpell() {
-                console.log("Hello dis is inside editSpell()");
-                console.log("name: " + this.spell.name);
-                console.log("kind id: " + this.currentSpell.kind_id);
-                console.log("id " + this.currentSpell.id);
-                console.log("slug " + this.currentSpell.slug);
-                console.log("name " + this.currentSpell.name);
-                console.log(this.currentSpell.quote);
-                console.log(this.currentSpell.description);
-                console.log(this.currentSpell.updated_at);
-                console.log(this.currentSpell.created_at);
 
                 this.returnMessageTheme = "";
                 //TODO check error handling, i.e. use wrong url, create spell that already exists
-                this.spell.put(`/spell/${this.spell.slug}`)
+                axios.put(`/spell/${this.spell.slug}`, {
+                    name: this.spell.name,
+                    quote: this.spell.quote,
+                    description: this.spell.description,
+                    kind_id: this.spell.kind_id
+
+                }, {timeout: 10000}, )
                     .then(res => {
-                        if (res === 1) {
-                            this.returnMessage = res.message;
+                        if (res.data.message === "Spell successfully update!") {
+                            console.log("Log from line 77");
+                            this.returnMessage = res.data.message;
                             this.returnMessageTheme = "returnMessageSuccess";
                             window.location.href = "/spell?success";
                         } else {
@@ -88,10 +85,38 @@
                     })
 
                     .catch(error => {
-                        this.returnMessage = error.name[0];
+
+                        console.error(error);
+                        if(error.response && error.response.data) {
+                            if(error.response.data.errors) {
+                                if(error.response.data.errors.name) {
+                                    this.returnMessage = error.response.data.errors.name[0];
+                                }
+                                else if(error.response.data.errors.description) {
+                                    this.returnMessage = error.response.data.errors.description[0];
+                                }
+                            }
+                            else if(error.response.data.message && error.response.data.message.match(/SQLSTATE\[23000\]/gi)) {
+                                this.returnMessage = "Spell with same name already exists";
+                            }
+                            else if(error.response.data.message && error.response.data.message !== "") {
+                                this.returnMessage = error.response.data.message;
+                            }
+                            else {
+                                this.returnMessage = error;
+                            }
+                        }
+                        else {
+                            this.returnMessage = error;
+                        }
+
                         this.returnMessageTheme = "returnMessageFailed";
                     });
             },
+            removeMessage() {
+                this.returnMessage = ""
+                this.returnMessageTheme = "";
+            }
         }
     }
 </script>
