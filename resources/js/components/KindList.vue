@@ -24,7 +24,7 @@
                 <td >{{ kind.created_at | moment("DD.MM.YYYY - hh:mm:ss") }}</td>
                 <td >{{ kind.updated_at | moment("DD.MM.YYYY - hh:mm:ss") }}</td>
                 <td ><a :href="kindLink + kind.slug + editLink">Edit</a></td>
-                <td  @click.stop="deleteKind(kind.slug)">Delete</td>
+                <td style="color:#FF0000" @click.stop="deleteKind(kind.slug)">Delete</td>
             </tr>
             <tr class="maTableOuterRow maTableOuterRowHidden " v-if="kind.spells && kind.spells.length">
                 <td colspan="6" class="maTableOuterRowFixedSize">

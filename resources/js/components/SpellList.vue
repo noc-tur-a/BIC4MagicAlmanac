@@ -25,7 +25,7 @@
                     <td>{{ spell.updated_at | moment("DD.MM.YYYY - hh:mm:ss") }}</td>
                     <!-- kind/SLUGNAME/edit -->
                     <td><a :href="spellLink + spell.slug + editLink">Edit</a></td>
-                    <td @click.stop="deleteSpell(spell.slug)">Delete</td>
+                    <td style="color:#FF0000" @click.stop="deleteSpell(spell.slug)">Delete</td>
                 </tr>
                 <tr class="maTableOuterRow maTableOuterRowHidden " v-if="spell.kind">
                     <td colspan="7" class="maTableOuterRowFixedSize">
