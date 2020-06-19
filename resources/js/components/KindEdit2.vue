@@ -2,7 +2,7 @@
 <script src="../utilities/Form.js"></script>
 <template>
     <div>
-        <h1>Edit Kind</h1>
+        <h1>Edit Kind muhu</h1>
         <template>
             <form  @submit.prevent>
                 <input type="hidden" name="id" v-model="kind.id">
@@ -15,11 +15,12 @@
                 <span class="inputText">{{ kind.created_at | moment("DD.MM.YYYY - hh:mm:ss") }}</span>
                 <br>
                 <label for="name">Name:</label>
-                <input type="text" id="name" name="name" v-model="kind.name" class="inputText">
+                <input type="text" required="required" id="name" name="name" class="inputText"
+                       v-model="kind.name" @focus.stop="removeMessage" @keypress.stop="removeMessage" >
                 <br>
 
                 <label for="description" class="labelTextArea">Description:</label>
-                <textarea id="description" name="description" v-model="kind.description" class="inputTextarea"></textarea>
+                <textarea required="required" id="description" name="description" class="inputTextarea" v-model="kind.description" @focus.stop="removeMessage" @keypress.stop="removeMessage"></textarea>
                 <br>
 
                 <input type="hidden" name="created_at" v-model="kind.created_at">
@@ -39,39 +40,50 @@
             return {
                 returnMessage: "",
                 returnMessageTheme: "",
-                kind: new Form({
-                        id: this.currentKind.id,
-                        slug: this.currentKind.slug,
-                        name: this.currentKind.name,
-                        description: this.currentKind.description,
-                        updated_at: this.currentKind.updated_at,
-                        created_at: this.currentKind.created_at
-                }),
+                kind: {
+                    id: this.currentKind.id,
+                    slug: this.currentKind.slug,
+                    name: this.currentKind.name,
+                    description: this.currentKind.description,
+                    updated_at: this.currentKind.updated_at,
+                    created_at: this.currentKind.created_at
+                }
             }
         },
         props: ['currentKind'],
         methods: {
+
             editKind() {
                 //TODO check error handling, i.e. use wrong url, create kind that already exists
                 this.returnMessageTheme = "";
-                this.kind.put(`/kind/${this.kind.slug}`)
-                .then(res => {
-                    if(res.message === "Kind successfully updated!") {
-                        this.returnMessage = res.message;
-                        this.returnMessageTheme = "returnMessageSuccess";
-                        window.location.href = "/kind?success";
-                    }
-                    else {
-                        this.returnMessage = res.message;
-                        this.returnMessageTheme = "returnMessageFailed";
-                        console.log("Message: Unexpected Error!");
-                    }
+                axios.put(`/kind/${this.kind.slug}`, {
+                    name: this.kind.name,
+                    description: this.kind.description
 
-                })
-                .catch(error => {
-                    this.returnMessage = error.name[0];
-                    this.returnMessageTheme = "returnMessageFailed";
-                });
+                }, {timeout: 10000 }, )
+                    .then(res => {
+                        if(res.data.message === "Kind successfully updated!") {
+                            this.returnMessage = res.data.message;
+                            this.returnMessageTheme = "returnMessageSuccess";
+                            window.location.href = "/kind?success";
+                        }
+
+                    })
+                    .catch(error => {
+                        if(error.response.data.errors) {
+                            if(error.response.data.errors.name) { this.returnMessage = error.response.data.errors.name[0];}
+                            else if(error.response.data.errors.description) { this.returnMessage = error.response.data.errors.description[0]; }
+                        }
+                        else if(error.response.data.message && error.response.data.message.match(/SQLSTATE\[23000\]/gi)) { this.returnMessage = "Kind with same name already exists"; }
+                        else if(error.response.data.message && error.response.data.message !== "") { this.returnMessage = error.response.data.message; }
+                        else { this.returnMessage = error; }
+
+                        this.returnMessageTheme = "returnMessageFailed";
+                    });
+            },
+            removeMessage() {
+                this.returnMessage = ""
+                this.returnMessageTheme = "";
             }
 
         }

@@ -53,9 +53,6 @@
 
         props: ['currentKinds'],
 
-        created() {
-
-        },
         methods: {
             createSpell() {
                 this.spell.kind_id = this.optionValue.value;

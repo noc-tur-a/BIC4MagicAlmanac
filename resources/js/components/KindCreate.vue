@@ -54,12 +54,11 @@
                     .catch(error => {
                         if(error) {
                             if(error.name) { this.returnMessage = error.name[0]; }
-                            if(error.description) { this.returnMessage = error.description[0]; }
+                            else if(error.description) { this.returnMessage = error.description[0]; }
                         } else {
                             this.returnMessage = "Unexpected Error: Kind with same name may already exist";
                         }
                         this.returnMessageTheme = "returnMessageFailed";
-                        //this.kind.reset();
                     });
             },
 

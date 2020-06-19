@@ -92,7 +92,7 @@
         created() {
 
             if(window.location.search === "?success") {
-                this.returnMessage = "Kind erfolgreich upgedated";
+                this.returnMessage = "Kind successfully updated!";
                 this.returnMessageTheme = "returnMessageSuccess";
 
                 window.setTimeout(function(){

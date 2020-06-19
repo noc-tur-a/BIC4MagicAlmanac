@@ -1997,16 +1997,14 @@ __webpack_require__.r(__webpack_exports__);
         if (error) {
           if (error.name) {
             _this.returnMessage = error.name[0];
-          }
-
-          if (error.description) {
+          } else if (error.description) {
             _this.returnMessage = error.description[0];
           }
         } else {
           _this.returnMessage = "Unexpected Error: Kind with same name may already exist";
         }
 
-        _this.returnMessageTheme = "returnMessageFailed"; //this.kind.reset();
+        _this.returnMessageTheme = "returnMessageFailed";
       });
     },
     removeMessage: function removeMessage() {
@@ -2062,19 +2060,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       returnMessage: "",
       returnMessageTheme: "",
-      kind: new Form({
+      kind: {
         id: this.currentKind.id,
         slug: this.currentKind.slug,
         name: this.currentKind.name,
         description: this.currentKind.description,
         updated_at: this.currentKind.updated_at,
         created_at: this.currentKind.created_at
-      })
+      }
     };
   },
   props: ['currentKind'],
@@ -2084,20 +2083,38 @@ __webpack_require__.r(__webpack_exports__);
 
       //TODO check error handling, i.e. use wrong url, create kind that already exists
       this.returnMessageTheme = "";
-      this.kind.put("/kind/".concat(this.kind.slug)).then(function (res) {
-        if (res.message === "Kind successfully updated!") {
-          _this.returnMessage = res.message;
+      axios.put("/kind/".concat(this.kind.slug), {
+        name: this.kind.name,
+        description: this.kind.description
+      }, {
+        timeout: 10000
+      }).then(function (res) {
+        if (res.data.message === "Kind successfully updated!") {
+          _this.returnMessage = res.data.message;
           _this.returnMessageTheme = "returnMessageSuccess";
           window.location.href = "/kind?success";
-        } else {
-          _this.returnMessage = res.message;
-          _this.returnMessageTheme = "returnMessageFailed";
-          console.log("Message: Unexpected Error!");
         }
       })["catch"](function (error) {
-        _this.returnMessage = error.name[0];
+        if (error.response.data.errors) {
+          if (error.response.data.errors.name) {
+            _this.returnMessage = error.response.data.errors.name[0];
+          } else if (error.response.data.errors.description) {
+            _this.returnMessage = error.response.data.errors.description[0];
+          }
+        } else if (error.response.data.message && error.response.data.message.match(/SQLSTATE\[23000\]/gi)) {
+          _this.returnMessage = "Kind with same name already exists";
+        } else if (error.response.data.message && error.response.data.message !== "") {
+          _this.returnMessage = error.response.data.message;
+        } else {
+          _this.returnMessage = error;
+        }
+
         _this.returnMessageTheme = "returnMessageFailed";
       });
+    },
+    removeMessage: function removeMessage() {
+      this.returnMessage = "";
+      this.returnMessageTheme = "";
     }
   }
 });
@@ -2206,7 +2223,7 @@ __webpack_require__.r(__webpack_exports__);
     var _this = this;
 
     if (window.location.search === "?success") {
-      this.returnMessage = "Kind erfolgreich upgedated";
+      this.returnMessage = "Kind successfully updated!";
       this.returnMessageTheme = "returnMessageSuccess";
       window.setTimeout(function () {
         var element = document.getElementById("returnMessageSpan");
@@ -2403,7 +2420,6 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   props: ['currentKinds'],
-  created: function created() {},
   methods: {
     createSpell: function createSpell() {
       var _this = this;
@@ -21483,7 +21499,7 @@ var render = function() {
   return _c(
     "div",
     [
-      _c("h1", [_vm._v("Edit Kind")]),
+      _c("h1", [_vm._v("Edit Kind muhu")]),
       _vm._v(" "),
       [
         _c(
@@ -21574,9 +21590,22 @@ var render = function() {
                 }
               ],
               staticClass: "inputText",
-              attrs: { type: "text", id: "name", name: "name" },
+              attrs: {
+                type: "text",
+                required: "required",
+                id: "name",
+                name: "name"
+              },
               domProps: { value: _vm.kind.name },
               on: {
+                focus: function($event) {
+                  $event.stopPropagation()
+                  return _vm.removeMessage($event)
+                },
+                keypress: function($event) {
+                  $event.stopPropagation()
+                  return _vm.removeMessage($event)
+                },
                 input: function($event) {
                   if ($event.target.composing) {
                     return
@@ -21604,9 +21633,21 @@ var render = function() {
                 }
               ],
               staticClass: "inputTextarea",
-              attrs: { id: "description", name: "description" },
+              attrs: {
+                required: "required",
+                id: "description",
+                name: "description"
+              },
               domProps: { value: _vm.kind.description },
               on: {
+                focus: function($event) {
+                  $event.stopPropagation()
+                  return _vm.removeMessage($event)
+                },
+                keypress: function($event) {
+                  $event.stopPropagation()
+                  return _vm.removeMessage($event)
+                },
                 input: function($event) {
                   if ($event.target.composing) {
                     return
