@@ -1,6 +1,7 @@
 <template>
     <div>
-        <h1>List spells</h1>
+        <h1>List of spells</h1>
+        <span id="axiosErrorMessage" class="ma-returnMessage"  :class="axiosErrorMessageTheme">{{ axiosErrorMessage }}</span>
         <span id="returnMessageSpan" class="ma-returnMessage"  :class="returnMessageTheme">{{ returnMessage }}</span>
         <table class="ma-tableOuter" v-if="spells && spells.length">
             <thead>
@@ -24,22 +25,15 @@
                     <td>{{ spell.updated_at | moment("DD.MM.YYYY - hh:mm:ss") }}</td>
                     <!-- kind/SLUGNAME/edit -->
                     <td><a :href="spellLink + spell.slug + editLink">Edit</a></td>
-                    <!-- <td>Edit</td> -->
-                    <!--<td @click="deleteKind(kind.slug)">Delete {{ kind.slug }}</td>-->
-                    <td>Delete</td>
+                    <td @click.stop="deleteSpell(spell.slug)">Delete</td>
                 </tr>
                 <tr class="maTableOuterRow maTableOuterRowHidden " v-if="spell.kind">
                     <td colspan="7" class="maTableOuterRowFixedSize">
                         <!--<table class="ma-tableInner" v-bind:class="{maTableInnerShow: isActive}">-->
                         <table class="ma-tableInner" style="width: 100%;">
-                      <!--      <colgroup>
-                                <col class="ma-tableInnerTd_10">
-                                <col class="ma-tableInnerTd_70">
-                                <col span="2" class="ma-tableInnerTd_10">
-                            </colgroup>-->
                             <thead>
                             <tr>
-                                <td colspan="4"><h3>Spells of <!--{{ kind.name }}--> (Total: <!--{{ kind.spells.length }}--> )</h3></td>
+                                <td colspan="4"><h3>Spell of Kind {{ spell.kind.name }}</h3></td>
                             </tr>
                             <tr>
                                 <th class="ma-tableInnerTd_10">Name</th>
@@ -61,8 +55,7 @@
             </template>
             <tfoot>
             <tr class="ma-tableRowOuterFooter">
-                <td>Total Kinds: <!--{{ kinds.length }}--> </td>
-                <td colspan="7">Total Spells: </td>
+                <td colspan="7">Total Spells: {{ totalSpells }}</td>
             </tr>
             </tfoot>
         </table>
@@ -74,10 +67,16 @@
         data() {
             return {
                 spells: [],
+                totalSpells: 0,
                 spellLink: "spell/",
                 editLink: "/edit",
-                returnMessage: "dis is a test",
+                returnMessage: "",
                 returnMessageTheme: "",
+                axiosErrorMessage: "",
+                axiosErrorMessageTheme: "",
+                spellDelete: new Form({
+                    slug: ""
+                })
             }
         },
         created() {
@@ -106,13 +105,16 @@
 
 
             //TODO Maybe use the fetch method?
+            //TODO error handling
             axios.get('/list/spell')
                 .then(response => {
                     this.spells = response.data
-                    console.log(this.spells);
+                    this.totalSpells = this.spells.length;
                 })
                 .catch(error => {
-                    console.log(error);
+                    console.error(error);
+                    this.axiosErrorMessage = error;
+                    this.axiosErrorMessageTheme = "returnMessageFailed";
                 })
         },
 
@@ -133,7 +135,29 @@
                     elementRow.classList.add("maTableOuterRowShow");
                     elementRowParent.classList.add("maTableOuterRowParentShow");
                 }
+            },
+
+            deleteSpell(slug) {
+                console.log("DELETE Slug");
+                console.log('Slug: ' + slug);
+
+                //TODO Delete the spells too
+                this.spellDelete.slug = slug;
+
+                for(let i = 0; i < this.spells.length; i++ ) {
+
+                    if(this.spells[i].slug === this.spellDelete.slug) {
+
+                        if(this.spells[i].kind) {
+                            event.target.parentNode.nextElementSibling.remove();
+                        }
+                        this.spellDelete.delete("/spell/" + this.spellDelete.slug);
+                        event.target.parentNode.remove();
+                        this.totalSpells--;
+                    }
+                }
             }
+
         }
     }
 </script>

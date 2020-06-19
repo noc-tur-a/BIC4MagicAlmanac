@@ -1,6 +1,7 @@
 <template>
     <div class="ma-content">
         <h1>List of kinds</h1>
+        <span id="axiosErrorMessage" class="ma-returnMessage"  :class="axiosErrorMessageTheme">{{ axiosErrorMessage }}</span>
         <span id="returnMessageSpan" class="ma-returnMessage"  :class="returnMessageTheme">{{ returnMessage }}</span>
 
         <table class="ma-tableOuter" v-if="kinds && kinds.length">
@@ -23,7 +24,7 @@
                 <td >{{ kind.created_at | moment("DD.MM.YYYY - hh:mm:ss") }}</td>
                 <td >{{ kind.updated_at | moment("DD.MM.YYYY - hh:mm:ss") }}</td>
                 <td ><a :href="kindLink + kind.slug + editLink">Edit</a></td>
-                <td  @click="deleteKind(kind.slug)">Delete</td>
+                <td  @click.stop="deleteKind(kind.slug)">Delete</td>
             </tr>
             <tr class="maTableOuterRow maTableOuterRowHidden " v-if="kind.spells && kind.spells.length">
                 <td colspan="6" class="maTableOuterRowFixedSize">
@@ -55,8 +56,7 @@
             </template>
             <tfoot>
                 <tr class="ma-tableRowOuterFooter">
-                    <td colspan="6">Total Kinds: {{ kinds.length }} </td>
-                    <!--<td colspan="5">Total Spells: </td>-->
+                    <td colspan="6">Total Kinds: {{ totalKinds }} </td>
                 </tr>
             </tfoot>
         </table>
@@ -70,11 +70,16 @@
             return {
 
                 kinds: [],
+                totalKinds: 0,
                 kindLink: "kind/",
                 editLink: "/edit",
-                //isActive: false,
-                returnMessage: "Test Message",
+                returnMessage: "",
                 returnMessageTheme: "",
+                axiosErrorMessage: "",
+                axiosErrorMessageTheme: "",
+                kind: new Form({
+                    slug: ""
+                })
             }
         },
         created() {
@@ -102,12 +107,16 @@
             }
 
             //TODO Maybe use the fetch method?
+            //TODO error handling
             axios.get('/list/kind')
                 .then(response => {
-                    this.kinds = response.data
+                    this.kinds = response.data;
+                    this.totalKinds = this.kinds.length;
                 })
                 .catch(error => {
-                    console.log(error);
+                    console.error(error);
+                    this.axiosErrorMessage = error;
+                    this.axiosErrorMessageTheme = "returnMessageFailed";
                 })
         },
         methods: {
@@ -128,14 +137,31 @@
                 }
 
             }, //END showSpells
+
             deleteKind(slug) {
-                console.log("DELETE KIND");
 
-                //e.stopPropagation();
-                console.log('Slug: ' + slug);
+                //TODO Delete the spells too
+                this.kind.slug = slug;
+                let hasSpellsInside = 0;
+                for(let i = 0; i < this.kinds.length; i++ ) {
 
-                //this.kind.delete("/kind/")
+                    if(this.kinds[i].slug === this.kind.slug) {
 
+                        for(let j = 0; j < this.kinds[i].spells.length; j++) {
+                            this.kind.delete("/spell/" + this.kinds[i].spells[j].slug);
+                            hasSpellsInside = 1;
+
+                        }
+                        this.kind.delete("/kind/" + this.kind.slug);
+
+                        if(hasSpellsInside === 1) {
+                            event.target.parentNode.nextElementSibling.remove();
+                            hasSpellsInside = 1;
+                        }
+                        event.target.parentNode.remove();
+                        this.totalKinds--;
+                    }
+                }
             }
 
         } //END Methods

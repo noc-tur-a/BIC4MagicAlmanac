@@ -57,11 +57,11 @@ h3 {
 }
 
 .ma-tableRowOuterFooter td:first-child {
-    border-radius: 0 0 0 15px;
+    border-radius: 0 0 15px 15px;
 }
 
 .ma-tableRowOuterFooter td:last-child {
-    border-radius: 0 0 15px 0;
+    border-radius: 0 0 15px 15px;
 }
 
 .ma-tableOuter th, td {
@@ -114,10 +114,10 @@ h3 {
 
 .ma-returnMessage {
     border-radius: 5px;
-    padding: 0 0 2px 4px;
+    padding: 2px 4px 2px 4px;
     font-size: 1.1em;
     margin-top: 10px;
-    width: 300px;
+    /*width: 400px;*/
     border: 1px solid #363636;
     color: #000;
     display: none;

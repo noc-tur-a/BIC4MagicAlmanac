@@ -2161,11 +2161,16 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       kinds: [],
+      totalKinds: 0,
       kindLink: "kind/",
       editLink: "/edit",
-      //isActive: false,
-      returnMessage: "Test Message",
-      returnMessageTheme: ""
+      returnMessage: "",
+      returnMessageTheme: "",
+      axiosErrorMessage: "",
+      axiosErrorMessageTheme: "",
+      kind: new Form({
+        slug: ""
+      })
     };
   },
   created: function created() {
@@ -2191,12 +2196,16 @@ __webpack_require__.r(__webpack_exports__);
         }, 20);
       }, 4000);
     } //TODO Maybe use the fetch method?
+    //TODO error handling
 
 
     axios.get('/list/kind').then(function (response) {
       _this.kinds = response.data;
+      _this.totalKinds = _this.kinds.length;
     })["catch"](function (error) {
-      console.log(error);
+      console.error(error);
+      _this.axiosErrorMessage = error;
+      _this.axiosErrorMessageTheme = "returnMessageFailed";
     });
   },
   methods: {
@@ -2219,9 +2228,28 @@ __webpack_require__.r(__webpack_exports__);
     },
     //END showSpells
     deleteKind: function deleteKind(slug) {
-      console.log("DELETE KIND"); //e.stopPropagation();
+      //TODO Delete the spells too
+      this.kind.slug = slug;
+      var hasSpellsInside = 0;
 
-      console.log('Slug: ' + slug); //this.kind.delete("/kind/")
+      for (var i = 0; i < this.kinds.length; i++) {
+        if (this.kinds[i].slug === this.kind.slug) {
+          for (var j = 0; j < this.kinds[i].spells.length; j++) {
+            this.kind["delete"]("/spell/" + this.kinds[i].spells[j].slug);
+            hasSpellsInside = 1;
+          }
+
+          this.kind["delete"]("/kind/" + this.kind.slug);
+
+          if (hasSpellsInside === 1) {
+            event.target.parentNode.nextElementSibling.remove();
+            hasSpellsInside = 1;
+          }
+
+          event.target.parentNode.remove();
+          this.totalKinds--;
+        }
+      }
     }
   } //END Methods
 
@@ -2551,21 +2579,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       spells: [],
+      totalSpells: 0,
       spellLink: "spell/",
       editLink: "/edit",
-      returnMessage: "dis is a test",
-      returnMessageTheme: ""
+      returnMessage: "",
+      returnMessageTheme: "",
+      axiosErrorMessage: "",
+      axiosErrorMessageTheme: "",
+      spellDelete: new Form({
+        slug: ""
+      })
     };
   },
   created: function created() {
@@ -2591,13 +2618,16 @@ __webpack_require__.r(__webpack_exports__);
         }, 20);
       }, 4000);
     } //TODO Maybe use the fetch method?
+    //TODO error handling
 
 
     axios.get('/list/spell').then(function (response) {
       _this.spells = response.data;
-      console.log(_this.spells);
+      _this.totalSpells = _this.spells.length;
     })["catch"](function (error) {
-      console.log(error);
+      console.error(error);
+      _this.axiosErrorMessage = error;
+      _this.axiosErrorMessageTheme = "returnMessageFailed";
     });
   },
   methods: {
@@ -2617,6 +2647,24 @@ __webpack_require__.r(__webpack_exports__);
       } else {
         elementRow.classList.add("maTableOuterRowShow");
         elementRowParent.classList.add("maTableOuterRowParentShow");
+      }
+    },
+    deleteSpell: function deleteSpell(slug) {
+      console.log("DELETE Slug");
+      console.log('Slug: ' + slug); //TODO Delete the spells too
+
+      this.spellDelete.slug = slug;
+
+      for (var i = 0; i < this.spells.length; i++) {
+        if (this.spells[i].slug === this.spellDelete.slug) {
+          if (this.spells[i].kind) {
+            event.target.parentNode.nextElementSibling.remove();
+          }
+
+          this.spellDelete["delete"]("/spell/" + this.spellDelete.slug);
+          event.target.parentNode.remove();
+          this.totalSpells--;
+        }
       }
     }
   }
@@ -21602,6 +21650,16 @@ var render = function() {
       "span",
       {
         staticClass: "ma-returnMessage",
+        class: _vm.axiosErrorMessageTheme,
+        attrs: { id: "axiosErrorMessage" }
+      },
+      [_vm._v(_vm._s(_vm.axiosErrorMessage))]
+    ),
+    _vm._v(" "),
+    _c(
+      "span",
+      {
+        staticClass: "ma-returnMessage",
         class: _vm.returnMessageTheme,
         attrs: { id: "returnMessageSpan" }
       },
@@ -21669,6 +21727,7 @@ var render = function() {
                       {
                         on: {
                           click: function($event) {
+                            $event.stopPropagation()
                             return _vm.deleteKind(kind.slug)
                           }
                         }
@@ -21761,7 +21820,7 @@ var render = function() {
             _c("tfoot", [
               _c("tr", { staticClass: "ma-tableRowOuterFooter" }, [
                 _c("td", { attrs: { colspan: "6" } }, [
-                  _vm._v("Total Kinds: " + _vm._s(_vm.kinds.length) + " ")
+                  _vm._v("Total Kinds: " + _vm._s(_vm.totalKinds) + " ")
                 ])
               ])
             ])
@@ -22408,7 +22467,17 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("h1", [_vm._v("List spells")]),
+    _c("h1", [_vm._v("List of spells")]),
+    _vm._v(" "),
+    _c(
+      "span",
+      {
+        staticClass: "ma-returnMessage",
+        class: _vm.axiosErrorMessageTheme,
+        attrs: { id: "axiosErrorMessage" }
+      },
+      [_vm._v(_vm._s(_vm.axiosErrorMessage))]
+    ),
     _vm._v(" "),
     _c(
       "span",
@@ -22476,7 +22545,18 @@ var render = function() {
                       )
                     ]),
                     _vm._v(" "),
-                    _c("td", [_vm._v("Delete")])
+                    _c(
+                      "td",
+                      {
+                        on: {
+                          click: function($event) {
+                            $event.stopPropagation()
+                            return _vm.deleteSpell(spell.slug)
+                          }
+                        }
+                      },
+                      [_vm._v("Delete")]
+                    )
                   ]
                 ),
                 _vm._v(" "),
@@ -22499,7 +22579,20 @@ var render = function() {
                                 staticStyle: { width: "100%" }
                               },
                               [
-                                _vm._m(1, true),
+                                _c("thead", [
+                                  _c("tr", [
+                                    _c("td", { attrs: { colspan: "4" } }, [
+                                      _c("h3", [
+                                        _vm._v(
+                                          "Spell of Kind " +
+                                            _vm._s(spell.kind.name)
+                                        )
+                                      ])
+                                    ])
+                                  ]),
+                                  _vm._v(" "),
+                                  _vm._m(1, true)
+                                ]),
                                 _vm._v(" "),
                                 _c("tr", [
                                   _c(
@@ -22554,7 +22647,13 @@ var render = function() {
               ]
             }),
             _vm._v(" "),
-            _vm._m(2)
+            _c("tfoot", [
+              _c("tr", { staticClass: "ma-tableRowOuterFooter" }, [
+                _c("td", { attrs: { colspan: "7" } }, [
+                  _vm._v("Total Spells: " + _vm._s(_vm.totalSpells))
+                ])
+              ])
+            ])
           ],
           2
         )
@@ -22588,36 +22687,14 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("thead", [
-      _c("tr", [
-        _c("td", { attrs: { colspan: "4" } }, [
-          _c("h3", [_vm._v("Spells of "), _vm._v(" (Total: "), _vm._v(" )")])
-        ])
-      ]),
+    return _c("tr", [
+      _c("th", { staticClass: "ma-tableInnerTd_10" }, [_vm._v("Name")]),
       _vm._v(" "),
-      _c("tr", [
-        _c("th", { staticClass: "ma-tableInnerTd_10" }, [_vm._v("Name")]),
-        _vm._v(" "),
-        _c("th", { staticClass: "ma-tableInnerTd_70" }, [
-          _vm._v("Description")
-        ]),
-        _vm._v(" "),
-        _c("th", { staticClass: "ma-tableInnerTd_10" }, [_vm._v("Created")]),
-        _vm._v(" "),
-        _c("th", { staticClass: "ma-tableInnerTd_10" }, [_vm._v("Updated")])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("tfoot", [
-      _c("tr", { staticClass: "ma-tableRowOuterFooter" }, [
-        _c("td", [_vm._v("Total Kinds: ")]),
-        _vm._v(" "),
-        _c("td", { attrs: { colspan: "7" } }, [_vm._v("Total Spells: ")])
-      ])
+      _c("th", { staticClass: "ma-tableInnerTd_70" }, [_vm._v("Description")]),
+      _vm._v(" "),
+      _c("th", { staticClass: "ma-tableInnerTd_10" }, [_vm._v("Created")]),
+      _vm._v(" "),
+      _c("th", { staticClass: "ma-tableInnerTd_10" }, [_vm._v("Updated")])
     ])
   }
 ]
@@ -41103,8 +41180,8 @@ var Form = /*#__PURE__*/function () {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\Users\noa\PhpstormProjects\BIC4MagicAlmanac\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\Users\noa\PhpstormProjects\BIC4MagicAlmanac\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\Users\VolkerTenta\PhpstormProjects\BIC4MagicAlmanac\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\Users\VolkerTenta\PhpstormProjects\BIC4MagicAlmanac\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
