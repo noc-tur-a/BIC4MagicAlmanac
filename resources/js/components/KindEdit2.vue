@@ -70,12 +70,17 @@
 
                     })
                     .catch(error => {
-                        if(error.response.data.errors) {
-                            if(error.response.data.errors.name) { this.returnMessage = error.response.data.errors.name[0];}
-                            else if(error.response.data.errors.description) { this.returnMessage = error.response.data.errors.description[0]; }
+
+                        console.error(error);
+                        if(error.response && error.response.data) {
+                            if(error.response.data.errors) {
+                                if(error.response.data.errors.name) { this.returnMessage = error.response.data.errors.name[0]; }
+                                else if(error.response.data.errors.description) { this.returnMessage = error.response.data.errors.description[0]; }
+                            }
+                            else if(error.response.data.message && error.response.data.message.match(/SQLSTATE\[23000\]/gi)) { this.returnMessage = "Spell with same name already exists"; }
+                            else if(error.response.data.message && error.response.data.message !== "") { this.returnMessage = error.response.data.message; }
+                            else { this.returnMessage = error; }
                         }
-                        else if(error.response.data.message && error.response.data.message.match(/SQLSTATE\[23000\]/gi)) { this.returnMessage = "Kind with same name already exists"; }
-                        else if(error.response.data.message && error.response.data.message !== "") { this.returnMessage = error.response.data.message; }
                         else { this.returnMessage = error; }
 
                         this.returnMessageTheme = "returnMessageFailed";

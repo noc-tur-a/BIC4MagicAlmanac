@@ -2095,16 +2095,22 @@ __webpack_require__.r(__webpack_exports__);
           window.location.href = "/kind?success";
         }
       })["catch"](function (error) {
-        if (error.response.data.errors) {
-          if (error.response.data.errors.name) {
-            _this.returnMessage = error.response.data.errors.name[0];
-          } else if (error.response.data.errors.description) {
-            _this.returnMessage = error.response.data.errors.description[0];
+        console.error(error);
+
+        if (error.response && error.response.data) {
+          if (error.response.data.errors) {
+            if (error.response.data.errors.name) {
+              _this.returnMessage = error.response.data.errors.name[0];
+            } else if (error.response.data.errors.description) {
+              _this.returnMessage = error.response.data.errors.description[0];
+            }
+          } else if (error.response.data.message && error.response.data.message.match(/SQLSTATE\[23000\]/gi)) {
+            _this.returnMessage = "Spell with same name already exists";
+          } else if (error.response.data.message && error.response.data.message !== "") {
+            _this.returnMessage = error.response.data.message;
+          } else {
+            _this.returnMessage = error;
           }
-        } else if (error.response.data.message && error.response.data.message.match(/SQLSTATE\[23000\]/gi)) {
-          _this.returnMessage = "Kind with same name already exists";
-        } else if (error.response.data.message && error.response.data.message !== "") {
-          _this.returnMessage = error.response.data.message;
         } else {
           _this.returnMessage = error;
         }
@@ -2411,12 +2417,12 @@ __webpack_require__.r(__webpack_exports__);
       returnMessage: "",
       returnMessageTheme: "",
       optionValue: "",
-      spell: new Form({
+      spell: {
         name: "",
         quote: "",
         description: "",
         kind_id: ""
-      })
+      }
     };
   },
   props: ['currentKinds'],
@@ -2424,24 +2430,45 @@ __webpack_require__.r(__webpack_exports__);
     createSpell: function createSpell() {
       var _this = this;
 
-      this.spell.kind_id = this.optionValue.value;
-      this.spell.post("/spell/").then(function (res) {
-        _this.returnMessage = "Spell erfolgreich erstellt!";
-        _this.returnMessageTheme = "returnMessageSuccess";
+      axios.post("/spell/", {
+        name: this.spell.name,
+        quote: this.spell.quote,
+        kind_id: this.optionValue.value,
+        description: this.spell.description
+      }, {
+        timeout: 10000
+      }).then(function (res) {
+        _this.returnMessage = "Spell created successfully";
+        _this.returnMessageTheme = "returnMessageSuccess"; //console.log(document.getElementById("spellForm"));
+
         document.getElementById("spellForm").reset();
+        _this.spell.name = "";
+        _this.spell.quote = "";
+        _this.spell.kind_id = "";
+        _this.spell.description = "";
       })["catch"](function (error) {
-        if (error) {
-          if (error.name) {
-            _this.returnMessage = error.name[0];
-          } else if (error.quote) {
-            _this.returnMessage = error.quote[0];
-          } else if (error.kind_id) {
-            _this.returnMessage = error.kind_id[0];
-          } else if (error.description) {
-            _this.returnMessage = error.description[0];
+        console.error(error);
+
+        if (error.response && error.response.data) {
+          if (error.response.data.errors) {
+            if (error.response.data.errors.name) {
+              _this.returnMessage = error.response.data.errors.name[0];
+            } else if (error.response.data.errors.quote) {
+              _this.returnMessage = error.response.data.errors.quote[0];
+            } else if (error.response.data.errors.kind_id) {
+              _this.returnMessage = error.response.data.errors.kind_id[0];
+            } else if (error.response.data.errors.description) {
+              _this.returnMessage = error.response.data.errors.description[0];
+            }
+          } else if (error.response.data.message && error.response.data.message.match(/SQLSTATE\[23000\]/gi)) {
+            _this.returnMessage = "Spell with same name already exists";
+          } else if (error.response.data.message && error.response.data.message !== "") {
+            _this.returnMessage = error.response.data.message;
+          } else {
+            _this.returnMessage = error;
           }
         } else {
-          _this.returnMessage = "Unexpected Error: Spell with same name may already exist";
+          _this.returnMessage = error;
         }
 
         _this.returnMessageTheme = "returnMessageFailed";
