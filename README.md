@@ -1,77 +1,76 @@
-# BIC4 Project: Magic almanac
+## Magic Almanac
 
-## The magic almanac
+##### github repository: https://github.com/noc-tur-a/BIC4MagicAlmanac
 
-This software lists magic spells and kinds belongs to them.
-It is possible to search for spells by various parameters.
+---
 
-## Exercise
+### Spells
 
-### Already providing
+#### List of Spells `/resources/views/spell/index.blade.php`
+Lists all spells currently saved in database and displays: _Name, Quote, Description, Created, Updated_.  
+Clicking on a spell expands the row and displays information about the kind the spell belongs to: _Name, Description, Created, Updated_.  
+Spells can be edited as well as deleted.
 
-All routes that are needed are implemented:
- * **GET** ```/spell``` &rarr; Lists all spells
- * **GET** ```/list/spell``` &rarr; Returns JSON of all spells
- * **GET** ```/list/kind``` &rarr; Returns JSON of all kinds
- * **POST** ```/spell``` &rarr; Stores new spells
- * **GET** ```/spell/{slug}``` &rarr; Show spell
- * **PUT** ```/spell/{slug}``` &rarr; Update invention
- * **GET** ```/spell/{slug}/edit``` &rarr; Edit spell
- * **GET** ```/search/spell``` &rarr; Search spells
- * **POST** ```/search/spell``` &rarr; Query spells
- * **GET** ```/kind``` &rarr; Lists all kinds
- * **GET** ```/list/kind``` &rarr; Returns JSON of all kinds
- * **POST** ```/kind``` &rarr; Stores new kinds
- * **GET** ```/kind/{slug}``` &rarr; Show kind
- * **PUT** ```/kind/{slug}``` &rarr; Update kind
- * **GET** ```/kind/{slug}/edit``` &rarr; Edit kind
+#### Create Spell `/resources/views/spell/create.blade.php`
+Adds a new entry to spells. User needs to fill in all required fields: _Name, Quote, Kind ID (a dropdown menu holds all available kinds), Description_.  
+Upon successful creation of a kind, a message informing the user is displayed and the form fields emptied.  
+In case of an error, an error message is displayed.
 
-All views can be found in ```/resources/views```.
+#### Edit Spell `/resources/views/spell/edit.blade.php`
+Editing permits changes of: _Name, Quote, Description_ of Spells.  
+Clicking `Update` saves changes to the database and forwards to `List of Spells`.  
+In case of an error, an error message is displayed.
 
-### TODO
+#### Search Spell `/resources/views/spell/search.blade.php`
+Search for spells by name.  
+Clicking on the input field "Suchtext" will open a drop down list of all spells.  
+Typing into the box will display all spells where names match the typed letters.  
+Selecting a spell name and clicking `Search` will display all found spells, clicking on the link forwards to `Show Spell`, with detailed information about the spell.  
+`Back` forwards to `Search Spell` page.
 
-#### VueJS
+#### Show Spell `/resources/views/spell/show.blade.php`
+Displays a single selected spell with all parameters: _Name, Created, Updated, Quote, Description_.  
+`Search Spell` forwards to this page.
 
-Implement your [VueJS](https://vue.js) components in the folder ```/resources/views/js/components```.
-Register your components in ```/resources/views/js/app.js``` and use them in the following files:
+---
 
- * ```/resources/views/kind```
-     * ```/resources/views/kind/create.blade.php```
-     * ```/resources/views/kind/edit.blade.php```
-     * ```/resources/views/kind/index.blade.php```
-     * ```/resources/views/kind/show.blade.php```
- * ```/resources/views/spell```
-      * ```/resources/views/spell/create.blade.php```
-      * ```/resources/views/spell/edit.blade.php```
-      * ```/resources/views/spell/index.blade.php```
-      * ```/resources/views/spell/search.blade.php```
-      * ```/resources/views/spell/show.blade.php```
-      
-To query data for dropdowns in forms or to reload lists use the list routes:
- * **GET** ```/list/spell```
- * **GET** ```/list/kind```
- 
-For the search form use ```q``` as the name for the text input.
-The search will be handled by the backend.
+### Kinds
 
-#### CSS (SCSS)
+#### List of Kinds `/resources/views/kind/index.blade.php`
+Lists all kinds currently saved in database and displays: _Name, Description, Created, Updated_.  
+Clicking on a kind expands the row and displays information about all spells of that kind: _Name, Quote, Description, Created, Update_.  
+Kinds can be edited as well as deleted.
 
-The design of the software need to be adapted.
-[Bulma](https://bulma.io) is used to layout and style the website.
-If wanted default styles can be overwritten by setting variables in the ```/resources/sass/_variables.scss``` file.
-Also it is possible to write custom styles in ```/resources/sass/_custom.scss```.
+#### Create Kind `/resources/views/kind/create.blade.php`
+Adds a new entry to spells. User needs to fill in all required fields: _Name, Description_.  
+Upon successful creation of a kind, a message informing the user is displayed and the form fields emptied.  
+In case of an error, an error message is displayed.
 
-A new logo need to be set. If pictures will be present on the website place them in ```/public/img``` folder.
-Here you will also find the logo.
+#### Edit Kind `/resources/views/kind/edit.blade.php`
+Editing permits changes of: _Name, Description_ of Kinds.   
+Clicking update saves changes to the database and forwards to `List of Kinds`.  
+In case of an error, an error message is displayed.
 
-### Hints
+#### Show Kind `/resources/views/kind/show.blade.php`
+Displays a single kind will all parameters: _Name, Created, Updated, Description_.  
+Can be reached by typing the kind name (slug) into the address bar (/kind/$name).
 
-#### JavaScript and CSS (SCSS)
+---
 
-To compile scss and JavaScript ```npm run dev``` need to be executed in the project folder.
-It is also possible to run ```npm run watch``` so it is not need to execute ```npm run dev``` every time a change happend. 
+#### Additional Changes
 
-#### Data for Database
+##### SpellController.php, KindController.php
+.  
+.  
+.  
+##### Error Handling (Axios vs dingens)
+.  
+.  
+.  
 
-To make starting developing fast there are some seeders implemented to fill all needed tables except the user table.
-To populate the database run the command ```php artisan db:seed``` in the terminal in project root folder.
+--- 
+#### Supported Browsers:
+- Firefox
+- Opera
+- Chrome
+- Microsoft Edge
