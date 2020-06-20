@@ -53,7 +53,7 @@
                         <tr v-for="spell in kind.spells">
                             <td>{{ spell.name }}</td>
                             <td>{{ spell.quote }}</td>
-                            <td style="width: 70%;">{{ spell.description }}</td>
+                            <td>{{ spell.description }}</td>
                             <td>{{ spell.created_at | moment("DD.MM.YYYY - hh:mm:ss") }}</td>
                             <td>{{ spell.updated_at | moment("DD.MM.YYYY - hh:mm:ss") }}</td>
                         </tr>

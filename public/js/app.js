@@ -21931,11 +21931,9 @@ var render = function() {
                                     _vm._v(" "),
                                     _c("td", [_vm._v(_vm._s(spell.quote))]),
                                     _vm._v(" "),
-                                    _c(
-                                      "td",
-                                      { staticStyle: { width: "70%" } },
-                                      [_vm._v(_vm._s(spell.description))]
-                                    ),
+                                    _c("td", [
+                                      _vm._v(_vm._s(spell.description))
+                                    ]),
                                     _vm._v(" "),
                                     _c("td", [
                                       _vm._v(
@@ -22783,61 +22781,54 @@ var render = function() {
                             attrs: { colspan: "7" }
                           },
                           [
-                            _c(
-                              "table",
-                              {
-                                staticClass: "ma-tableInner",
-                                staticStyle: { width: "100%" }
-                              },
-                              [
-                                _vm._m(1, true),
-                                _vm._v(" "),
-                                _c("thead", [
-                                  _c("tr", [
-                                    _c("td", { attrs: { colspan: "4" } }, [
-                                      _c("h3", [
-                                        _vm._v(
-                                          "Spell of Kind " +
-                                            _vm._s(spell.kind.name)
-                                        )
-                                      ])
+                            _c("table", { staticClass: "ma-tableInner" }, [
+                              _vm._m(1, true),
+                              _vm._v(" "),
+                              _c("thead", [
+                                _c("tr", [
+                                  _c("td", { attrs: { colspan: "4" } }, [
+                                    _c("h3", [
+                                      _vm._v(
+                                        "Spell of Kind " +
+                                          _vm._s(spell.kind.name)
+                                      )
                                     ])
-                                  ]),
-                                  _vm._v(" "),
-                                  _vm._m(2, true)
+                                  ])
                                 ]),
                                 _vm._v(" "),
-                                _c("tr", [
-                                  _c("td", [_vm._v(_vm._s(spell.kind.name))]),
-                                  _vm._v(" "),
-                                  _c("td", [
-                                    _vm._v(_vm._s(spell.kind.description))
-                                  ]),
-                                  _vm._v(" "),
-                                  _c("td", [
-                                    _vm._v(
-                                      _vm._s(
-                                        _vm._f("moment")(
-                                          spell.kind.created_at,
-                                          "DD.MM.YYYY - hh:mm:ss"
-                                        )
+                                _vm._m(2, true)
+                              ]),
+                              _vm._v(" "),
+                              _c("tr", [
+                                _c("td", [_vm._v(_vm._s(spell.kind.name))]),
+                                _vm._v(" "),
+                                _c("td", [
+                                  _vm._v(_vm._s(spell.kind.description))
+                                ]),
+                                _vm._v(" "),
+                                _c("td", [
+                                  _vm._v(
+                                    _vm._s(
+                                      _vm._f("moment")(
+                                        spell.kind.created_at,
+                                        "DD.MM.YYYY - hh:mm:ss"
                                       )
                                     )
-                                  ]),
-                                  _vm._v(" "),
-                                  _c("td", [
-                                    _vm._v(
-                                      _vm._s(
-                                        _vm._f("moment")(
-                                          spell.kind.updated_at,
-                                          "DD.MM.YYYY - hh:mm:ss"
-                                        )
+                                  )
+                                ]),
+                                _vm._v(" "),
+                                _c("td", [
+                                  _vm._v(
+                                    _vm._s(
+                                      _vm._f("moment")(
+                                        spell.kind.updated_at,
+                                        "DD.MM.YYYY - hh:mm:ss"
                                       )
                                     )
-                                  ])
+                                  )
                                 ])
-                              ]
-                            )
+                              ])
+                            ])
                           ]
                         )
                       ]

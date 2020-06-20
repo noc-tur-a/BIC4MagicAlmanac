@@ -30,7 +30,7 @@
                 <tr class="maTableOuterRow maTableOuterRowHidden " v-if="spell.kind">
                     <td colspan="7" class="maTableOuterRowFixedSize">
                         <!--<table class="ma-tableInner" v-bind:class="{maTableInnerShow: isActive}">-->
-                        <table class="ma-tableInner" style="width: 100%;">
+                        <table class="ma-tableInner">
                             <colgroup>
                                 <col class="ma-Td_Width_10">
                                 <col class="ma-Td_Width_70">
