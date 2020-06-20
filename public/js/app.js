@@ -1976,32 +1976,47 @@ __webpack_require__.r(__webpack_exports__);
     return {
       returnMessage: "",
       returnMessageTheme: "",
-      kind: new Form({
+      kind: {
         name: "",
         description: ""
-      })
+      }
     };
   },
   methods: {
     createKind: function createKind() {
       var _this = this;
 
-      this.kind.post("/kind/").then(function (res) {
-        _this.returnMessage = "Kind successfully created";
-        _this.returnMessageTheme = "returnMessageSuccess"; //this.kind.reset();
-        //we use build in javascipt method to reset the form because the provided reset function
-        //from Form.js doesn't handle the required="required" correctly
+      axios.post("/kind/", {
+        name: this.kind.name,
+        description: this.kind.description
+      }, {
+        timeout: 10000
+      }).then(function (res) {
+        _this.returnMessage = "Kind created successfully";
+        _this.returnMessageTheme = "returnMessageSuccess"; //console.log(document.getElementById("spellForm"));
 
         document.getElementById("kindForm").reset();
+        _this.kind.name = "";
+        _this.kind.description = "";
       })["catch"](function (error) {
-        if (error) {
-          if (error.name) {
-            _this.returnMessage = error.name[0];
-          } else if (error.description) {
-            _this.returnMessage = error.description[0];
+        console.error(error);
+
+        if (error.response && error.response.data) {
+          if (error.response.data.errors) {
+            if (error.response.data.errors.name) {
+              _this.returnMessage = error.response.data.errors.name[0];
+            } else if (error.response.data.errors.description) {
+              _this.returnMessage = error.response.data.errors.description[0];
+            }
+          } else if (error.response.data.message && error.response.data.message.match(/SQLSTATE\[23000\]/gi)) {
+            _this.returnMessage = "Spell with same name already exists";
+          } else if (error.response.data.message && error.response.data.message !== "") {
+            _this.returnMessage = error.response.data.message;
+          } else {
+            _this.returnMessage = error;
           }
         } else {
-          _this.returnMessage = "Unexpected Error: Kind with same name may already exist";
+          _this.returnMessage = error;
         }
 
         _this.returnMessageTheme = "returnMessageFailed";
@@ -2081,7 +2096,6 @@ __webpack_require__.r(__webpack_exports__);
     editKind: function editKind() {
       var _this = this;
 
-      //TODO check error handling, i.e. use wrong url, create kind that already exists
       this.returnMessageTheme = "";
       axios.put("/kind/".concat(this.kind.slug), {
         name: this.kind.name,
@@ -2262,7 +2276,6 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     showSpells: function showSpells(e) {
-      //TODO VUE CLASSBINDING?
       var elementRow = e.target.parentNode.nextElementSibling;
       var elementRowParent = e.target.parentNode;
 
@@ -2345,22 +2358,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: "test",
   data: function data() {
     return {
       status: 'Critical'
     };
   },
-  props: ['currentKind'],
-  methods: {
-    changeStatus: function changeStatus() {
-      if (this.status === 'Critical') {
-        this.status = 'Normal';
-      } else {
-        this.status = 'Critical';
-      }
-    }
-  }
+  props: ['currentKind']
 });
 
 /***/ }),
@@ -2539,7 +2542,7 @@ __webpack_require__.r(__webpack_exports__);
     return {
       returnMessage: "",
       returnMessageTheme: "",
-      spell: new Form({
+      spell: {
         kind_id: this.currentSpell.kind_id,
         id: this.currentSpell.id,
         slug: this.currentSpell.slug,
@@ -2548,7 +2551,7 @@ __webpack_require__.r(__webpack_exports__);
         description: this.currentSpell.description,
         updated_at: this.currentSpell.updated_at,
         created_at: this.currentSpell.created_at
-      })
+      }
     };
   },
   props: ['currentSpell'],
@@ -2556,21 +2559,18 @@ __webpack_require__.r(__webpack_exports__);
     editSpell: function editSpell() {
       var _this = this;
 
-      console.log("Hello dis is inside editSpell()");
-      console.log("name: " + this.spell.name);
-      console.log("kind id: " + this.currentSpell.kind_id);
-      console.log("id " + this.currentSpell.id);
-      console.log("slug " + this.currentSpell.slug);
-      console.log("name " + this.currentSpell.name);
-      console.log(this.currentSpell.quote);
-      console.log(this.currentSpell.description);
-      console.log(this.currentSpell.updated_at);
-      console.log(this.currentSpell.created_at);
-      this.returnMessageTheme = ""; //TODO check error handling, i.e. use wrong url, create spell that already exists
-
-      this.spell.put("/spell/".concat(this.spell.slug)).then(function (res) {
-        if (res === 1) {
-          _this.returnMessage = res.message;
+      this.returnMessageTheme = "";
+      axios.put("/spell/".concat(this.spell.slug), {
+        name: this.spell.name,
+        quote: this.spell.quote,
+        description: this.spell.description,
+        kind_id: this.spell.kind_id
+      }, {
+        timeout: 10000
+      }).then(function (res) {
+        if (res.data.message === "Spell successfully update!") {
+          console.log("Log from line 77");
+          _this.returnMessage = res.data.message;
           _this.returnMessageTheme = "returnMessageSuccess";
           window.location.href = "/spell?success";
         } else {
@@ -2578,9 +2578,32 @@ __webpack_require__.r(__webpack_exports__);
           _this.returnMessageTheme = "returnMessageFailed";
         }
       })["catch"](function (error) {
-        _this.returnMessage = error.name[0];
+        console.error(error);
+
+        if (error.response && error.response.data) {
+          if (error.response.data.errors) {
+            if (error.response.data.errors.name) {
+              _this.returnMessage = error.response.data.errors.name[0];
+            } else if (error.response.data.errors.description) {
+              _this.returnMessage = error.response.data.errors.description[0];
+            }
+          } else if (error.response.data.message && error.response.data.message.match(/SQLSTATE\[23000\]/gi)) {
+            _this.returnMessage = "Spell with same name already exists";
+          } else if (error.response.data.message && error.response.data.message !== "") {
+            _this.returnMessage = error.response.data.message;
+          } else {
+            _this.returnMessage = error;
+          }
+        } else {
+          _this.returnMessage = error;
+        }
+
         _this.returnMessageTheme = "returnMessageFailed";
       });
+    },
+    removeMessage: function removeMessage() {
+      this.returnMessage = "";
+      this.returnMessageTheme = "";
     }
   }
 });
@@ -2686,7 +2709,7 @@ __webpack_require__.r(__webpack_exports__);
     var _this = this;
 
     if (window.location.search === "?success") {
-      this.returnMessage = "Spell erfolgreich upgedated";
+      this.returnMessage = "Spell successfully updated!";
       this.returnMessageTheme = "returnMessageSuccess";
       window.setTimeout(function () {
         var element = document.getElementById("returnMessageSpan");
@@ -2719,8 +2742,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     showKind: function showKind(e) {
-      console.log("showKind"); //TODO VUE CLASSBINDING?
-
+      console.log("showKind");
       var elementRow = e.target.parentNode.nextElementSibling;
       var elementRowParent = e.target.parentNode;
 

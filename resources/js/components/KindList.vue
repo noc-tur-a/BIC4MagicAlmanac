@@ -125,9 +125,7 @@
                 })
         },
         methods: {
-
             showSpells(e) {
-                //TODO VUE CLASSBINDING?
                 var elementRow = e.target.parentNode.nextElementSibling
                 var elementRowParent = e.target.parentNode;
 
@@ -144,7 +142,6 @@
             }, //END showSpells
 
             deleteKind(slug) {
-
                 this.kind.slug = slug;
                 let hasSpellsInside = 0;
                 for(let i = 0; i < this.kinds.length; i++ ) {

@@ -54,7 +54,6 @@
         methods: {
 
             editKind() {
-                //TODO check error handling, i.e. use wrong url, create kind that already exists
                 this.returnMessageTheme = "";
                 axios.put(`/kind/${this.kind.slug}`, {
                     name: this.kind.name,

@@ -124,7 +124,6 @@
         methods: {
             showKind(e) {
                 console.log("showKind");
-                //TODO VUE CLASSBINDING?
                 var elementRow = e.target.parentNode.nextElementSibling
                 var elementRowParent = e.target.parentNode;
 

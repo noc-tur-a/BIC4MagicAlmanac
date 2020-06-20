@@ -30,34 +30,42 @@
             return {
                 returnMessage: "",
                 returnMessageTheme: "",
-                kind: new Form({
+                kind: {
                     name: "",
                     description: ""
-                }),
-
-
+                }
             }
         },
         methods: {
 
             createKind() {
-                this.kind.post("/kind/")
+                axios.post("/kind/", {
+                    name: this.kind.name,
+                    description: this.kind.description
+
+                }, {timeout: 10000 })
                     .then(res => {
-                        this.returnMessage = "Kind successfully created";
+                        this.returnMessage = "Kind created successfully";
                         this.returnMessageTheme = "returnMessageSuccess";
-                        //this.kind.reset();
-                        //we use build in javascipt method to reset the form because the provided reset function
-                        //from Form.js doesn't handle the required="required" correctly
+                        //console.log(document.getElementById("spellForm"));
                         document.getElementById("kindForm").reset();
+                        this.kind.name = "";
+                        this.kind.description = "";
 
                     })
                     .catch(error => {
-                        if(error) {
-                            if(error.name) { this.returnMessage = error.name[0]; }
-                            else if(error.description) { this.returnMessage = error.description[0]; }
-                        } else {
-                            this.returnMessage = "Unexpected Error: Kind with same name may already exist";
+                        console.error(error);
+                        if(error.response && error.response.data) {
+                            if(error.response.data.errors) {
+                                if(error.response.data.errors.name) { this.returnMessage = error.response.data.errors.name[0]; }
+                                else if(error.response.data.errors.description) { this.returnMessage = error.response.data.errors.description[0]; }
+                            }
+                            else if(error.response.data.message && error.response.data.message.match(/SQLSTATE\[23000\]/gi)) { this.returnMessage = "Spell with same name already exists"; }
+                            else if(error.response.data.message && error.response.data.message !== "") { this.returnMessage = error.response.data.message; }
+                            else { this.returnMessage = error; }
                         }
+                        else { this.returnMessage = error; }
+
                         this.returnMessageTheme = "returnMessageFailed";
                     });
             },

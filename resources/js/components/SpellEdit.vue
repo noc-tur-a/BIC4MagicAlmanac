@@ -62,9 +62,7 @@
 
         methods: {
             editSpell() {
-
                 this.returnMessageTheme = "";
-                //TODO check error handling, i.e. use wrong url, create spell that already exists
                 axios.put(`/spell/${this.spell.slug}`, {
                     name: this.spell.name,
                     quote: this.spell.quote,

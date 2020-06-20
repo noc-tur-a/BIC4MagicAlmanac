@@ -28,7 +28,6 @@
 
 <script>
 	export default {
-		name: "test",
 		data: function() {
 			return {
 
@@ -38,11 +37,6 @@
 
 		props: ['currentKind'],
 
-		methods: {
-			changeStatus() {
-				if(this.status === 'Critical') { this.status = 'Normal'; } else { this.status = 'Critical'; }
-			}
-		}
 	}
 </script>
 
