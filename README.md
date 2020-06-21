@@ -1,6 +1,8 @@
 ## Magic Almanac
 
 ##### github repository: https://github.com/noc-tur-a/BIC4MagicAlmanac
+Noa Hörmer (ic18b086),
+Volker Tenta (ic18b055)
 
 ---
 
