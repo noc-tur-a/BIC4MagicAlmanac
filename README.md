@@ -59,16 +59,24 @@ Can be reached by typing the kind name (slug) into the address bar (/kind/$name)
 
 #### Additional Changes
 
-##### SpellController.php, KindController.php
-.  
-.  
-.  
-##### Error Handling (Axios vs dingens)
-.  
-.  
-.  
+##### Error Handling (Axios vs Forms.js)
+We decided to use axios calls to query the database because Form.js lacks basic error handling.
+Some errors aren't even catchable at all, therefore we chose to use axios, for it provides a consistence error handling routine, even
+though the Controllers aren't correctly implemented (i.e. the update function in the SpellController). We fixed that.
+We only use the Form.js to delete entries, be it Spells or Kinds.       
+ 
 
---- 
+---
+
+##### SpellController.php, KindController.php
+We had to alter the Controllers to make certain functionality available and to make them work consistently 
+for all pages (i.e. Error handling). 
+
+The SpellSearch.vue gets all spells from the controller to make them available via the datalist element, yet the
+the search finds all entries matching the input via an regular experssion match.
+  
+.  
+ 
 #### Supported Browsers:
 - Firefox
 - Opera
