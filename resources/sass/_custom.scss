@@ -11,11 +11,11 @@
 }
 
 .is-fullheight.main {
-    min-height: calc(100vh - 6.75rem);
+    min-height: calc(100vh - 9rem);
 }
 
 .is-fullheight.section {
-    min-height: calc(100vh - 6.75rem);
+    min-height: calc(100vh - 9rem);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -39,7 +39,8 @@
 }
 
 .footer{
-    height: 5vh;
+    height: 10vh;
+    background-color: whitesmoke;
 }
 
 .hero.is-fullheight-with-navbar{

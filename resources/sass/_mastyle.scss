@@ -14,7 +14,7 @@ h3 {
 }
 
 .ma-tableOuter {
-    border:1px solid #363636;
+    border:1px solid $border-grey;
     border-radius: 15px;
     border-collapse: separate;
     width: 100%;
@@ -41,7 +41,7 @@ h3 {
 }
 
 .ma-tableRowOuterHeader th {
-    background-color: #00b89c;
+    background-color: $primary;
 }
 
 .ma-tableRowOuterHeader th:first-child {
@@ -53,7 +53,7 @@ h3 {
 }
 
 .ma-tableRowOuterFooter td {
-    background-color: #00b89c;
+    background-color: $primary;
 }
 
 .ma-tableRowOuterFooter td:first-child {
@@ -66,15 +66,15 @@ h3 {
 
 .ma-tableOuter th, td {
     padding:5px 10px;
-    border-bottom: 1px solid #000;
+    border-bottom: 1px solid $border-grey;
 }
 
 .ma-tableOuter th {
-    border-bottom: 2px solid #363636;
+    border-bottom: 2px solid $border-grey;
 }
 
 .ma-tableOuter tfoot td {
-    border-top: 1px solid #363636;
+    border-top: 1px solid $border-grey;
 }
 
 .ma-tableOuter tfoot tr:last-child td {
@@ -83,8 +83,8 @@ h3 {
 
 .ma-tableInner {
     width: 100%;
-    background-color: #fff;
-    border:1px solid #363636;
+    background-color: $white;
+    border:1px solid $border-grey;
     border-radius: 15px;
     border-collapse: separate;
     //white-space: normal;
@@ -126,25 +126,26 @@ h3 {
     font-size: 1.1em;
     margin-top: 10px;
 
-    border: 1px solid #363636;
-    color: #000;
+    border: 1px solid $border-grey;
+    /*color: #000000;*/
     display: none;
 }
 
 .ma-returnMessageSuccess {
-    background-color: #00b89c;
+    background-color: $success;
     display: inline-block;
 }
 
 .returnMessageFailed {
-    background-color: #ff0000;
+    background-color: $red;
+    color: $white;
     display: inline-block;
 }
 
 .ma-delete {
-    color: #ff0000;
+    color: $red;
 }
 
 .ma-delete:hover {
-    color: #000000;
+    color: $black;
 }

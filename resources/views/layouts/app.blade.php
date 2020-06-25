@@ -141,9 +141,11 @@
         @yield('content')
     </div>
 
-    <footer class="footer" style="background-color: /*#00b89c*/  whitesmoke; height: 94px;">
+    <footer class="footer">
         <div class="content has-text-centered">
-            <img src="{{asset('img/happy_unicorn_64.png')}}" width="41" height="64" alt="Happy Unicorn Logo">
+            <img src="{{asset('img/happy_unicorn_64.png')}}" alt="Happy Unicorn Logo">
+            <!-- <img src="{{asset('img/happy_unicorn_64.png')}}" width="41" height="64" alt="Happy Unicorn Logo"> -->
+
             {{--<small style="margin-bottom: 40px;">A Happy Unicorn presentation</small>--}}
         </div>
     </footer>

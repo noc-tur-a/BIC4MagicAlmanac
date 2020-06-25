@@ -12,18 +12,19 @@ span { display: inline-block; }
     font-size: 1.2em;
     margin-top: 10px;
     /*width: 300px;*/
-    border: 1px solid #363636;
+    border: 1px solid $border-grey;
     color: #000;
     display: none;
 }
 
 .returnMessageSuccess {
-    background-color: #00b89c;
+    background-color: $success;
     display: inline-block;
 }
 
 .returnMessageFailed {
-    background-color: #ff0000;
+    background-color: $red;
+    color: $white;
     display: inline-block;
 }
 
@@ -34,7 +35,7 @@ span { display: inline-block; }
     font-size: 1.2em;
     margin-top: 10px;
     width: 300px;
-    border: 1px solid #363636;
+    border: 1px solid $border-grey;
 }
 
 .inputTextarea {
@@ -45,7 +46,7 @@ span { display: inline-block; }
     margin-top: 10px;
     width:600px;
     height: 100px;
-    border: 1px solid #363636;
+    border: 1px solid $border-grey;
 }
 
 .labelTextArea {
@@ -57,7 +58,8 @@ span { display: inline-block; }
     font-size: 1.2em;
     margin-left: 124px;
     margin-top: 10px;
-    border: 1px solid #363636;
-    background-color: #00b89c;
+    border: 1px solid $border-grey;
+    background-color: $primary;
+    color: $white;
 
 }
