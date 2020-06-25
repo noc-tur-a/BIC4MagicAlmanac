@@ -12,12 +12,17 @@
                 <input required="required" id="quote" name="quote" class="inputText"
                        v-model.trim="spell.quote" @focus.stop="removeMessage" @keypress.stop="removeMessage">
                 <br>
-                <label for="kindId" class="labelTextArea">Kind Id:</label>
+                <label for="kindId" class="labelTextArea">Kind:</label>
+                <!--<select id="kindId" required="required" class="inputText"
+                        v-model="optionValue" @change.stop="removeMessage">
+                        <option v-for="(currentKind, index ) in currentKinds" v-bind:value="currentKind.id" v-bind:selected="index === 0 ? 'selected' : false">
+                            {{ currentKind.name }}
+                        </option>
+                </select>-->
                 <select id="kindId" required="required" class="inputText"
                         v-model="optionValue" @change.stop="removeMessage">
-                    <template v-for="currentKind in currentKinds">
-                        <option v-bind:value="{ value: currentKind.id }" >{{ currentKind.name }}</option>
-                    </template>
+                        <option class="myOption" v-for="(currentKind, index) in currentKinds" v-bind:value="{ value: currentKind.id }"
+                                :key="index" v-bind:selected="index === 0 ? 'selected' : false" >{{ currentKind.name }}</option>
                 </select>
                 <br>
                 <label for="description" class="labelTextArea">Description:</label>
@@ -27,6 +32,8 @@
 
                 <input type="submit" name="submit" value="Create" class="submit" @click="createSpell()">
                 <span class="returnMessage"  :class="returnMessageTheme">{{ returnMessage }}</span>
+                <span class="myOption">Urag</span>
+                <span class="myOption">jkljlk</span>
 
             </form>
 
@@ -39,6 +46,8 @@
     export default {
         data: function() {
             return {
+                myForm: "",
+                myOptions: "",
                 returnMessage: "",
                 returnMessageTheme: "",
                 optionValue: "",
@@ -52,6 +61,16 @@
         },
 
         props: ['currentKinds'],
+
+        mounted() {
+            this.myForm = document.getElementById("spellForm");
+            console.log(this.myForm);
+            this.myOptions = document.getElementsByClassName('myOption');
+
+            console.log("myOptions:" +  this.myOptions[0] );
+            this.myOptions[0].setAttribute("selected", "selected")
+            this.$forceUpdate();
+        },
 
         methods: {
             createSpell() {

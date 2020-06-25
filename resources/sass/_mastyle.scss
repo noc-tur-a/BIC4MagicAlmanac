@@ -27,21 +27,23 @@ h3 {
 }
 
 .maTableOuterRowShow {
-    background-color: #dddddd;
+    background-color: $table-row;
     display: table-row;
 }
 
 .maTableOuterRowParentShow td {
-    background-color: #dddddd;
+    background-color: $table-row;
     border:0;
 }
 
 .maTableOuterRow:hover {
-    background-color: #dddddd;
+    background-color: $table-row;
 }
 
 .ma-tableRowOuterHeader th {
     background-color: $primary;
+    color: $white;
+
 }
 
 .ma-tableRowOuterHeader th:first-child {
@@ -50,10 +52,12 @@ h3 {
 
 .ma-tableRowOuterHeader th:last-child {
     border-radius: 0 15px 0 0;
+
 }
 
 .ma-tableRowOuterFooter td {
     background-color: $primary;
+    color: $white;
 }
 
 .ma-tableRowOuterFooter td:first-child {
@@ -127,7 +131,6 @@ h3 {
     margin-top: 10px;
 
     border: 1px solid $border-grey;
-    /*color: #000000;*/
     display: none;
 }
 

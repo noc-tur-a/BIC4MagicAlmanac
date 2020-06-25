@@ -2293,24 +2293,26 @@ __webpack_require__.r(__webpack_exports__);
     },
     //END showSpells
     deleteKind: function deleteKind(slug) {
-      this.kind.slug = slug;
-      var hasSpellsInside = 0;
+      if (confirm("Are you sure?")) {
+        this.kind.slug = slug;
+        var hasSpellsInside = 0;
 
-      for (var i = 0; i < this.kinds.length; i++) {
-        if (this.kinds[i].slug === this.kind.slug) {
-          for (var j = 0; j < this.kinds[i].spells.length; j++) {
-            this.kind["delete"]("/spell/" + this.kinds[i].spells[j].slug);
-            hasSpellsInside = 1;
+        for (var i = 0; i < this.kinds.length; i++) {
+          if (this.kinds[i].slug === this.kind.slug) {
+            for (var j = 0; j < this.kinds[i].spells.length; j++) {
+              this.kind["delete"]("/spell/" + this.kinds[i].spells[j].slug);
+              hasSpellsInside = 1;
+            }
+
+            this.kind["delete"]("/kind/" + this.kind.slug);
+
+            if (hasSpellsInside === 1) {
+              event.target.parentNode.nextElementSibling.remove();
+            }
+
+            event.target.parentNode.remove();
+            this.totalKinds--;
           }
-
-          this.kind["delete"]("/kind/" + this.kind.slug);
-
-          if (hasSpellsInside === 1) {
-            event.target.parentNode.nextElementSibling.remove();
-          }
-
-          event.target.parentNode.remove();
-          this.totalKinds--;
         }
       }
     }
@@ -2414,9 +2416,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      myForm: "",
+      myOptions: "",
       returnMessage: "",
       returnMessageTheme: "",
       optionValue: "",
@@ -2429,6 +2440,14 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   props: ['currentKinds'],
+  mounted: function mounted() {
+    this.myForm = document.getElementById("spellForm");
+    console.log(this.myForm);
+    this.myOptions = document.getElementsByClassName('myOption');
+    console.log("myOptions:" + this.myOptions[0]);
+    this.myOptions[0].setAttribute("selected", "selected");
+    this.$forceUpdate();
+  },
   methods: {
     createSpell: function createSpell() {
       var _this = this;
@@ -22249,7 +22268,7 @@ var render = function() {
             _c(
               "label",
               { staticClass: "labelTextArea", attrs: { for: "kindId" } },
-              [_vm._v("Kind Id:")]
+              [_vm._v("Kind:")]
             ),
             _vm._v(" "),
             _c(
@@ -22287,18 +22306,21 @@ var render = function() {
                   ]
                 }
               },
-              [
-                _vm._l(_vm.currentKinds, function(currentKind) {
-                  return [
-                    _c(
-                      "option",
-                      { domProps: { value: { value: currentKind.id } } },
-                      [_vm._v(_vm._s(currentKind.name))]
-                    )
-                  ]
-                })
-              ],
-              2
+              _vm._l(_vm.currentKinds, function(currentKind, index) {
+                return _c(
+                  "option",
+                  {
+                    key: index,
+                    staticClass: "myOption",
+                    domProps: {
+                      value: { value: currentKind.id },
+                      selected: index === 0 ? "selected" : false
+                    }
+                  },
+                  [_vm._v(_vm._s(currentKind.name))]
+                )
+              }),
+              0
             ),
             _vm._v(" "),
             _c("br"),
@@ -22363,7 +22385,11 @@ var render = function() {
               "span",
               { staticClass: "returnMessage", class: _vm.returnMessageTheme },
               [_vm._v(_vm._s(_vm.returnMessage))]
-            )
+            ),
+            _vm._v(" "),
+            _c("span", { staticClass: "myOption" }, [_vm._v("Urag")]),
+            _vm._v(" "),
+            _c("span", { staticClass: "myOption" }, [_vm._v("jkljlk")])
           ]
         )
       ]

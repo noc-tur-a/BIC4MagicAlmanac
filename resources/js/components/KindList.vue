@@ -142,24 +142,26 @@
             }, //END showSpells
 
             deleteKind(slug) {
-                this.kind.slug = slug;
-                let hasSpellsInside = 0;
-                for(let i = 0; i < this.kinds.length; i++ ) {
+                if(confirm("Are you sure?")) {
+                    this.kind.slug = slug;
+                    let hasSpellsInside = 0;
+                    for (let i = 0; i < this.kinds.length; i++) {
 
-                    if(this.kinds[i].slug === this.kind.slug) {
+                        if(this.kinds[i].slug === this.kind.slug) {
 
-                        for(let j = 0; j < this.kinds[i].spells.length; j++) {
-                            this.kind.delete("/spell/" + this.kinds[i].spells[j].slug);
-                            hasSpellsInside = 1;
+                            for (let j = 0; j < this.kinds[i].spells.length; j++) {
+                                this.kind.delete("/spell/" + this.kinds[i].spells[j].slug);
+                                hasSpellsInside = 1;
 
+                            }
+                            this.kind.delete("/kind/" + this.kind.slug);
+
+                            if(hasSpellsInside === 1) {
+                                event.target.parentNode.nextElementSibling.remove();
+                            }
+                            event.target.parentNode.remove();
+                            this.totalKinds--;
                         }
-                        this.kind.delete("/kind/" + this.kind.slug);
-
-                        if(hasSpellsInside === 1) {
-                            event.target.parentNode.nextElementSibling.remove();
-                        }
-                        event.target.parentNode.remove();
-                        this.totalKinds--;
                     }
                 }
             }
