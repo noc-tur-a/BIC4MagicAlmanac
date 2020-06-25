@@ -2416,13 +2416,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2430,7 +2423,9 @@ __webpack_require__.r(__webpack_exports__);
       myOptions: "",
       returnMessage: "",
       returnMessageTheme: "",
-      optionValue: "",
+      selected: {
+        value: this.currentKinds[0].id
+      },
       spell: {
         name: "",
         quote: "",
@@ -2440,14 +2435,6 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   props: ['currentKinds'],
-  mounted: function mounted() {
-    this.myForm = document.getElementById("spellForm");
-    console.log(this.myForm);
-    this.myOptions = document.getElementsByClassName('myOption');
-    console.log("myOptions:" + this.myOptions[0]);
-    this.myOptions[0].setAttribute("selected", "selected");
-    this.$forceUpdate();
-  },
   methods: {
     createSpell: function createSpell() {
       var _this = this;
@@ -2455,7 +2442,7 @@ __webpack_require__.r(__webpack_exports__);
       axios.post("/spell/", {
         name: this.spell.name,
         quote: this.spell.quote,
-        kind_id: this.optionValue.value,
+        kind_id: this.selected.value,
         description: this.spell.description
       }, {
         timeout: 10000
@@ -22278,8 +22265,8 @@ var render = function() {
                   {
                     name: "model",
                     rawName: "v-model",
-                    value: _vm.optionValue,
-                    expression: "optionValue"
+                    value: _vm.selected,
+                    expression: "selected"
                   }
                 ],
                 staticClass: "inputText",
@@ -22295,7 +22282,7 @@ var render = function() {
                           var val = "_value" in o ? o._value : o.value
                           return val
                         })
-                      _vm.optionValue = $event.target.multiple
+                      _vm.selected = $event.target.multiple
                         ? $$selectedVal
                         : $$selectedVal[0]
                     },
@@ -22306,16 +22293,12 @@ var render = function() {
                   ]
                 }
               },
-              _vm._l(_vm.currentKinds, function(currentKind, index) {
+              _vm._l(_vm.currentKinds, function(currentKind) {
                 return _c(
                   "option",
                   {
-                    key: index,
                     staticClass: "myOption",
-                    domProps: {
-                      value: { value: currentKind.id },
-                      selected: index === 0 ? "selected" : false
-                    }
+                    domProps: { value: { value: currentKind.id } }
                   },
                   [_vm._v(_vm._s(currentKind.name))]
                 )
@@ -22385,11 +22368,7 @@ var render = function() {
               "span",
               { staticClass: "returnMessage", class: _vm.returnMessageTheme },
               [_vm._v(_vm._s(_vm.returnMessage))]
-            ),
-            _vm._v(" "),
-            _c("span", { staticClass: "myOption" }, [_vm._v("Urag")]),
-            _vm._v(" "),
-            _c("span", { staticClass: "myOption" }, [_vm._v("jkljlk")])
+            )
           ]
         )
       ]
