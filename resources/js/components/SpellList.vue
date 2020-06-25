@@ -3,7 +3,7 @@
 		<h1>List of spells</h1>
 		<span id="axiosErrorMessage" class="ma-returnMessage"  :class="axiosErrorMessageTheme">{{ axiosErrorMessage }}</span>
 		<span id="returnMessageSpan" class="ma-returnMessage"  :class="returnMessageTheme">{{ returnMessage }}</span>
-		<span id="spellListEmptyMessage" class="ma-returnMessage" :class="returnMessageTheme">{{ emptyMessage }}</span>
+		<h2>{{ emptySpellListMessage }}</h2>
 
 		<table class="ma-tableOuter" v-if="spells && spells.length">
 			<thead>
@@ -82,20 +82,13 @@
 				returnMessageTheme: "",
 				axiosErrorMessage: "",
 				axiosErrorMessageTheme: "",
-				emptyMessage: "",
+                emptySpellListMessage: "",
 				spellDelete: new Form({
 					slug: ""
 				})
 			}
 		},
 		created() {
-
-			/*if (this.totalSpells === 0)
-            {
-				this.emptyMessage = "No Spells to display!";
-				this.returnMessageTheme = "noContentMessage";
-			}*/
-
 
 			if(window.location.search === "?success") {
 				this.returnMessage = "Spell successfully updated!";
@@ -124,12 +117,10 @@
 					this.spells = response.data
 					this.totalSpells = this.spells.length;
 
-                    if (this.totalSpells === 0)
-					{
-						this.emptyMessage = "No Spells to display!";
-						this.returnMessageTheme = "noContentMessage";
-					}
-
+                    if (this.spells.length === 0)
+                    {
+                        this.emptySpellListMessage = "No Spells to display!";
+                    }
 				})
 				.catch(error => {
 					console.error(error);
@@ -158,22 +149,21 @@
 
 			deleteSpell(slug) {
 
-				this.spellDelete.slug = slug;
+                if(confirm("Are you sure?")) {
+                    this.spellDelete.slug = slug;
 
-				for(let i = 0; i < this.spells.length; i++ ) {
-
-					if(this.spells[i].slug === this.spellDelete.slug) {
-
-						if(this.spells[i].kind) {
-							event.target.parentNode.nextElementSibling.remove();
-						}
-						this.spellDelete.delete("/spell/" + this.spellDelete.slug);
-						event.target.parentNode.remove();
-						this.totalSpells--;
-					}
-				}
+                    for(let i = 0; i < this.spells.length; i++ ) {
+                        if(this.spells[i].slug === this.spellDelete.slug) {
+                            if(this.spells[i].kind) {
+                                event.target.parentNode.nextElementSibling.remove();
+                            }
+                            this.spellDelete.delete("/spell/" + this.spellDelete.slug);
+                            event.target.parentNode.remove();
+                            this.totalSpells--;
+                        }
+                    }
+                }
 			}
-
 		}
 	}
 </script>

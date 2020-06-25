@@ -11777,6 +11777,13 @@ h1 {
   display: inline-block;
 }
 
+h2 {
+  font-size: 1.8em;
+  font-weight: bold;
+  padding: 10px 20px;
+  color: #6e089b;
+}
+
 h3 {
   font-weight: bold;
 }
@@ -11900,12 +11907,6 @@ td {
 
 .returnMessageFailed {
   background-color: #e3342f;
-  color: #ffffff;
-  display: inline-block;
-}
-
-.noContentMessage {
-  background-color: #6e089b;
   color: #ffffff;
   display: inline-block;
 }

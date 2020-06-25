@@ -2223,6 +2223,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2234,6 +2235,7 @@ __webpack_require__.r(__webpack_exports__);
       returnMessageTheme: "",
       axiosErrorMessage: "",
       axiosErrorMessageTheme: "",
+      emptyKindListMessage: "",
       kind: new Form({
         slug: ""
       })
@@ -2268,6 +2270,10 @@ __webpack_require__.r(__webpack_exports__);
     }).then(function (response) {
       _this.kinds = response.data;
       _this.totalKinds = _this.kinds.length;
+
+      if (_this.kinds.length === 0) {
+        _this.emptyKindListMessage = "No Kinds to display!";
+      }
     })["catch"](function (error) {
       console.error(error);
       _this.axiosErrorMessage = error;
@@ -2708,7 +2714,7 @@ __webpack_require__.r(__webpack_exports__);
       returnMessageTheme: "",
       axiosErrorMessage: "",
       axiosErrorMessageTheme: "",
-      emptyMessage: "",
+      emptySpellListMessage: "",
       spellDelete: new Form({
         slug: ""
       })
@@ -2717,11 +2723,6 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     var _this = this;
 
-    /*if (this.totalSpells === 0)
-             {
-    	this.emptyMessage = "No Spells to display!";
-    	this.returnMessageTheme = "noContentMessage";
-    }*/
     if (window.location.search === "?success") {
       this.returnMessage = "Spell successfully updated!";
       this.returnMessageTheme = "returnMessageSuccess";
@@ -2749,9 +2750,8 @@ __webpack_require__.r(__webpack_exports__);
       _this.spells = response.data;
       _this.totalSpells = _this.spells.length;
 
-      if (_this.totalSpells === 0) {
-        _this.emptyMessage = "No Spells to display!";
-        _this.returnMessageTheme = "noContentMessage";
+      if (_this.spells.length === 0) {
+        _this.emptySpellListMessage = "No Spells to display!";
       }
     })["catch"](function (error) {
       console.error(error);
@@ -2778,17 +2778,19 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     deleteSpell: function deleteSpell(slug) {
-      this.spellDelete.slug = slug;
+      if (confirm("Are you sure?")) {
+        this.spellDelete.slug = slug;
 
-      for (var i = 0; i < this.spells.length; i++) {
-        if (this.spells[i].slug === this.spellDelete.slug) {
-          if (this.spells[i].kind) {
-            event.target.parentNode.nextElementSibling.remove();
+        for (var i = 0; i < this.spells.length; i++) {
+          if (this.spells[i].slug === this.spellDelete.slug) {
+            if (this.spells[i].kind) {
+              event.target.parentNode.nextElementSibling.remove();
+            }
+
+            this.spellDelete["delete"]("/spell/" + this.spellDelete.slug);
+            event.target.parentNode.remove();
+            this.totalSpells--;
           }
-
-          this.spellDelete["delete"]("/spell/" + this.spellDelete.slug);
-          event.target.parentNode.remove();
-          this.totalSpells--;
         }
       }
     }
@@ -21836,6 +21838,8 @@ var render = function() {
       [_vm._v(_vm._s(_vm.returnMessage))]
     ),
     _vm._v(" "),
+    _c("h2", [_vm._v(_vm._s(_vm.emptyKindListMessage))]),
+    _vm._v(" "),
     _vm.kinds && _vm.kinds.length
       ? _c(
           "table",
@@ -22715,15 +22719,7 @@ var render = function() {
       [_vm._v(_vm._s(_vm.returnMessage))]
     ),
     _vm._v(" "),
-    _c(
-      "span",
-      {
-        staticClass: "ma-returnMessage",
-        class: _vm.returnMessageTheme,
-        attrs: { id: "spellListEmptyMessage" }
-      },
-      [_vm._v(_vm._s(_vm.emptyMessage))]
-    ),
+    _c("h2", [_vm._v(_vm._s(_vm.emptySpellListMessage))]),
     _vm._v(" "),
     _vm.spells && _vm.spells.length
       ? _c(

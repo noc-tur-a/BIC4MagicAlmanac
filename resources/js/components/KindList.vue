@@ -3,6 +3,7 @@
         <h1>List of kinds</h1>
         <span id="axiosErrorMessage" class="ma-returnMessage"  :class="axiosErrorMessageTheme">{{ axiosErrorMessage }}</span>
         <span id="returnMessageSpan" class="ma-returnMessage"  :class="returnMessageTheme">{{ returnMessage }}</span>
+        <h2>{{ emptyKindListMessage }}</h2>
 
         <table class="ma-tableOuter" v-if="kinds && kinds.length">
             <colgroup>
@@ -84,6 +85,7 @@
                 returnMessageTheme: "",
                 axiosErrorMessage: "",
                 axiosErrorMessageTheme: "",
+                emptyKindListMessage: "",
                 kind: new Form({
                     slug: ""
                 })
@@ -117,6 +119,13 @@
                 .then(response => {
                     this.kinds = response.data;
                     this.totalKinds = this.kinds.length;
+
+                    if (this.kinds.length === 0)
+                    {
+                        this.emptyKindListMessage = "No Kinds to display!";
+                    }
+
+
                 })
                 .catch(error => {
                     console.error(error);

@@ -9,6 +9,13 @@ h1 {
     display: inline-block;
 }
 
+h2 {
+    font-size: 1.8em;
+    font-weight: bold;
+    padding:10px 20px;
+    color: #6e089b;
+}
+
 h3 {
     font-weight: bold;
 }
@@ -141,12 +148,6 @@ h3 {
 
 .returnMessageFailed {
     background-color: $red;
-    color: $white;
-    display: inline-block;
-}
-
-.noContentMessage {
-    background-color: #6e089b;
     color: $white;
     display: inline-block;
 }
