@@ -11904,6 +11904,12 @@ td {
   display: inline-block;
 }
 
+.noContentMessage {
+  background-color: #6e089b;
+  color: #ffffff;
+  display: inline-block;
+}
+
 .ma-delete {
   color: #e3342f;
 }

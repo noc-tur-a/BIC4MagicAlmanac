@@ -2695,6 +2695,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2706,6 +2708,7 @@ __webpack_require__.r(__webpack_exports__);
       returnMessageTheme: "",
       axiosErrorMessage: "",
       axiosErrorMessageTheme: "",
+      emptyMessage: "",
       spellDelete: new Form({
         slug: ""
       })
@@ -2714,6 +2717,11 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     var _this = this;
 
+    /*if (this.totalSpells === 0)
+             {
+    	this.emptyMessage = "No Spells to display!";
+    	this.returnMessageTheme = "noContentMessage";
+    }*/
     if (window.location.search === "?success") {
       this.returnMessage = "Spell successfully updated!";
       this.returnMessageTheme = "returnMessageSuccess";
@@ -2740,6 +2748,11 @@ __webpack_require__.r(__webpack_exports__);
     }).then(function (response) {
       _this.spells = response.data;
       _this.totalSpells = _this.spells.length;
+
+      if (_this.totalSpells === 0) {
+        _this.emptyMessage = "No Spells to display!";
+        _this.returnMessageTheme = "noContentMessage";
+      }
     })["catch"](function (error) {
       console.error(error);
       _this.axiosErrorMessage = error;
@@ -22702,6 +22715,16 @@ var render = function() {
       [_vm._v(_vm._s(_vm.returnMessage))]
     ),
     _vm._v(" "),
+    _c(
+      "span",
+      {
+        staticClass: "ma-returnMessage",
+        class: _vm.returnMessageTheme,
+        attrs: { id: "spellListEmptyMessage" }
+      },
+      [_vm._v(_vm._s(_vm.emptyMessage))]
+    ),
+    _vm._v(" "),
     _vm.spells && _vm.spells.length
       ? _c(
           "table",
@@ -41389,8 +41412,8 @@ var Form = /*#__PURE__*/function () {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\Users\VolkerTenta\PhpstormProjects\BIC4MagicAlmanac\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\Users\VolkerTenta\PhpstormProjects\BIC4MagicAlmanac\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\Users\noa\PhpstormProjects\BIC4MagicAlmanac\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\Users\noa\PhpstormProjects\BIC4MagicAlmanac\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
