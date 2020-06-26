@@ -11732,11 +11732,11 @@ label.panel-block:hover {
 }
 
 .is-fullheight.main {
-  min-height: calc(100vh - 9rem);
+  min-height: calc(100vh - 9.1rem);
 }
 
 .is-fullheight.section {
-  min-height: calc(100vh - 9rem);
+  min-height: calc(100vh - 9.1rem);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -11758,12 +11758,16 @@ label.panel-block:hover {
 }
 
 .footer {
-  height: 10vh;
+  height: 11vh;
   background-color: whitesmoke;
 }
 
 .hero.is-fullheight-with-navbar {
   min-height: calc(100vh - 6.75rem);
+}
+
+body {
+  cursor: url(/images/happy_unicorn_64.png?d019df0e881e0785fed1025d67414a81), default;
 }
 
 .ma-content {

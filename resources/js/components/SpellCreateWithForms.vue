@@ -61,6 +61,9 @@
                         document.getElementById("spellForm").reset();
                     })
                     .catch(error => {
+                        //if there is a already a spell with the same name, or error 404 happens, or the server is unavailable
+                        //error is UNDEFINED
+                        console.log(error);
                         if(error) {
                             if(error.name) { this.returnMessage = error.name[0]; }
                             else if(error.quote) { this.returnMessage= error.quote[0]; }

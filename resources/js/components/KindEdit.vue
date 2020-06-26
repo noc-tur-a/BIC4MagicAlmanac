@@ -2,9 +2,9 @@
 <script src="../utilities/Form.js"></script>
 <template>
     <div>
-        <h1>Edit Kind</h1>
+        <h1>Edit Kind muhu</h1>
         <template>
-            <form @submit.prevent>
+            <form  @submit.prevent>
                 <input type="hidden" name="id" v-model="kind.id">
 
                 <input type="hidden" name="slug" v-model="kind.slug">
@@ -15,11 +15,12 @@
                 <span class="inputText">{{ kind.created_at | moment("DD.MM.YYYY - hh:mm:ss") }}</span>
                 <br>
                 <label for="name">Name:</label>
-                <input type="text" id="name" name="name" v-model="kind.name" class="inputText">
+                <input type="text" required="required" id="name" name="name" class="inputText"
+                       v-model="kind.name" @focus.stop="removeMessage" @keypress.stop="removeMessage" >
                 <br>
 
                 <label for="description" class="labelTextArea">Description:</label>
-                <textarea id="description" name="description" v-model="kind.description" class="inputTextarea"></textarea>
+                <textarea required="required" id="description" name="description" class="inputTextarea" v-model="kind.description" @focus.stop="removeMessage" @keypress.stop="removeMessage"></textarea>
                 <br>
 
                 <input type="hidden" name="created_at" v-model="kind.created_at">
@@ -37,78 +38,58 @@
     export default {
         data: function() {
             return {
-                currentSlug: "",
-                link: '/list/kind',
                 returnMessage: "",
                 returnMessageTheme: "",
-                kind: new Form({
-                        id: "",
-                        slug: "",
-                        name: "",
-                        description: "",
-                        updated_at: "",
-                        created_at: ""
-                }),
-                kinds: []
+                kind: {
+                    id: this.currentKind.id,
+                    slug: this.currentKind.slug,
+                    name: this.currentKind.name,
+                    description: this.currentKind.description,
+                    updated_at: this.currentKind.updated_at,
+                    created_at: this.currentKind.created_at
+                }
             }
         },
         props: ['currentKind'],
-
-        created: function(){
-            //this.currentSlug = window.location.pathname.split('/kind/').pop().split('/edit')[0];
-            console.log(this.currentKind);
-            //location.pathname = "urga";
-            this.fetchKinds(this.link);
-
-        },
         methods: {
-            prepareSlugName(str) {
-              return str.trim()
-                  .replace(/[- ]{2,}/, "-")
-                  .replace(/[^a-zA-Z- ]/mg, "")
-                  .replace(/^[- ]+/mg, "")
-                  .replace(/[- ]+$/mg, "")
-                  .trim()
-                  .replace(/ /mg, "-")
-                  .toLowerCase();
-              //return str;
-            },
-            editKind() {
-                //this.currentSlug = this.prepareSlugName(this.kind.name);
-                this.kind.put(`/kind/${this.kind.slug}`)
-                .then(res => {
-                    if(res === 1) {
-                       /* if(this.currentSlug !== this.prepareSlugName(this.kind.name)) {
-                            this.currentSlug = this.prepareSlugName(this.kind.name);
-                            window.location.pathname = "kind/" + this.currentSlug + "/edit";
-                        }*/
 
-                        this.returnMessageTheme = "returnMessageSuccess";
-                        this.returnMessage = "Update erfolgreich";
-                    } else {
-                        this.returnMessageTheme = "returnMessageFailed";
-                        this.returnMessage = "Update fehlgeschlagen";
-                    }
-                    this.fetchKinds(this.link);
-                });
-            },
-            fetchKinds(link) {
-                fetch(link)
-                .then(res => res.json())
-                .then(res => {
-                    this.kinds = res;
-                    for(let i = 0; i < this.kinds.length; i++) {
-                        if(this.kinds[i].slug === this.currentSlug) {
-                            this.kind.id = this.kinds[i].id;
-                            this.kind.slug = this.kinds[i].slug;
-                            this.kind.name = this.kinds[i].name;
-                            this.kind.description = this.kinds[i].description;
-                            this.kind.created_at = this.kinds[i].created_at;
-                            this.kind.updated_at = this.kinds[i].updated_at;
+            editKind() {
+                this.returnMessageTheme = "";
+                axios.put(`/kind/${this.kind.slug}`, {
+                    name: this.kind.name,
+                    description: this.kind.description
+
+                }, {timeout: 10000 }, )
+                    .then(res => {
+                        if(res.data.message === "Kind successfully updated!") {
+                            this.returnMessage = res.data.message;
+                            this.returnMessageTheme = "returnMessageSuccess";
+                            window.location.href = "/kind?success";
                         }
-                    }
-                });
+
+                    })
+                    .catch(error => {
+
+                        console.error(error);
+                        if(error.response && error.response.data) {
+                            if(error.response.data.errors) {
+                                if(error.response.data.errors.name) { this.returnMessage = error.response.data.errors.name[0]; }
+                                else if(error.response.data.errors.description) { this.returnMessage = error.response.data.errors.description[0]; }
+                            }
+                            else if(error.response.data.message && error.response.data.message.match(/SQLSTATE\[23000\]/gi)) { this.returnMessage = "Spell with same name already exists"; }
+                            else if(error.response.data.message && error.response.data.message !== "") { this.returnMessage = error.response.data.message; }
+                            else { this.returnMessage = error; }
+                        }
+                        else { this.returnMessage = error; }
+
+                        this.returnMessageTheme = "returnMessageFailed";
+                    });
+            },
+            removeMessage() {
+                this.returnMessage = ""
+                this.returnMessageTheme = "";
             }
+
         }
     }
 </script>

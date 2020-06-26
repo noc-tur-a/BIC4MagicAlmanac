@@ -122,7 +122,7 @@
 
                     if (this.kinds.length === 0)
                     {
-                        this.emptyKindListMessage = "No Kinds to display!";
+                        this.emptyKindListMessage = "No Kinds to display! Please create one.";
                     }
 
 

@@ -65,8 +65,21 @@ Can be reached by typing the kind name (slug) into the address bar (/kind/$name)
 We decided to use axios calls to query the database because Form.js lacks basic error handling.
 Some errors aren't even catchable at all, therefore we chose to use axios, for it provides a consistence error handling routine, even
 though the Controllers aren't correctly implemented (i.e. the update function in the SpellController). We fixed that.
-We only use the Form.js to delete entries, be it Spells or Kinds.       
+We only use the Form.js to delete entries, be it Spells or Kinds.
+
+We left the SpellCreateWithForms.vue component for demonstration purpose. If used, one will see that errors like "Spell with same name already
+exists", 404 or Network error (server crashes or unavailable) aren't caught correctly.        
  
+
+---
+
+#### Fixes
+
+- adjusted screen height and colors
+- show message if there are no Kinds
+- show message if there are no Spells
+- user has to confirm before deletion of spells or kinds
+- create spell: first kind is auto selected in option list
 
 ---
 

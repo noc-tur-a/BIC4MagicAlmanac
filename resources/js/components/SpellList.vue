@@ -119,7 +119,7 @@
 
                     if (this.spells.length === 0)
                     {
-                        this.emptySpellListMessage = "No Spells to display!";
+                        this.emptySpellListMessage = "No Spells to display! Please create one.";
                     }
 				})
 				.catch(error => {

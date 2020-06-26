@@ -2031,10 +2031,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/KindEdit2.vue?vue&type=script&lang=js&":
-/*!********************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/KindEdit2.vue?vue&type=script&lang=js& ***!
-  \********************************************************************************************************************************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/KindEdit.vue?vue&type=script&lang=js&":
+/*!*******************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/KindEdit.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -2272,7 +2272,7 @@ __webpack_require__.r(__webpack_exports__);
       _this.totalKinds = _this.kinds.length;
 
       if (_this.kinds.length === 0) {
-        _this.emptyKindListMessage = "No Kinds to display!";
+        _this.emptyKindListMessage = "No Kinds to display! Please create one.";
       }
     })["catch"](function (error) {
       console.error(error);
@@ -2751,7 +2751,7 @@ __webpack_require__.r(__webpack_exports__);
       _this.totalSpells = _this.spells.length;
 
       if (_this.spells.length === 0) {
-        _this.emptySpellListMessage = "No Spells to display!";
+        _this.emptySpellListMessage = "No Spells to display! Please create one.";
       }
     })["catch"](function (error) {
       console.error(error);
@@ -21551,10 +21551,10 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/KindEdit2.vue?vue&type=template&id=7300b459&scoped=true&":
-/*!************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/KindEdit2.vue?vue&type=template&id=7300b459&scoped=true& ***!
-  \************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/KindEdit.vue?vue&type=template&id=ae438bae&scoped=true&":
+/*!***********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/KindEdit.vue?vue&type=template&id=ae438bae&scoped=true& ***!
+  \***********************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -40215,13 +40215,14 @@ window.Vue = vue__WEBPACK_IMPORTED_MODULE_0___default.a;
 Vue.component('example-component', __webpack_require__(/*! ./components/ExampleComponent.vue */ "./resources/js/components/ExampleComponent.vue")["default"]);
 Vue.component('query-message', __webpack_require__(/*! ./components/base/QueryMessage.vue */ "./resources/js/components/base/QueryMessage.vue")["default"]);
 Vue.component('kind-list', __webpack_require__(/*! ./components/KindList.vue */ "./resources/js/components/KindList.vue")["default"]); //Vue.component('kind-list', require('./components/KindList2.vue').default);
-//Vue.component('kind-edit', require('./components/KindEdit.vue').default);
+//Vue.component('kind-edit', require('./components/KindEdit_tobedeleted.vue').default);
 
-Vue.component('kind-edit', __webpack_require__(/*! ./components/KindEdit2.vue */ "./resources/js/components/KindEdit2.vue")["default"]);
+Vue.component('kind-edit', __webpack_require__(/*! ./components/KindEdit.vue */ "./resources/js/components/KindEdit.vue")["default"]);
 Vue.component('kind-create', __webpack_require__(/*! ./components/KindCreate.vue */ "./resources/js/components/KindCreate.vue")["default"]);
 Vue.component('kind-show', __webpack_require__(/*! ./components/KindShow.vue */ "./resources/js/components/KindShow.vue")["default"]);
 Vue.component('spell-list', __webpack_require__(/*! ./components/SpellList.vue */ "./resources/js/components/SpellList.vue")["default"]);
-Vue.component('spell-create', __webpack_require__(/*! ./components/SpellCreate.vue */ "./resources/js/components/SpellCreate.vue")["default"]);
+Vue.component('spell-create', __webpack_require__(/*! ./components/SpellCreate.vue */ "./resources/js/components/SpellCreate.vue")["default"]); //Vue.component('spell-create', require('./components/SpellCreateWithForms.vue').default);
+
 Vue.component('spell-search', __webpack_require__(/*! ./components/SpellSearch.vue */ "./resources/js/components/SpellSearch.vue")["default"]);
 Vue.component('spell-show', __webpack_require__(/*! ./components/SpellShow.vue */ "./resources/js/components/SpellShow.vue")["default"]);
 Vue.component('spell-edit', __webpack_require__(/*! ./components/SpellEdit.vue */ "./resources/js/components/SpellEdit.vue")["default"]);
@@ -40434,17 +40435,17 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/components/KindEdit2.vue":
-/*!***********************************************!*\
-  !*** ./resources/js/components/KindEdit2.vue ***!
-  \***********************************************/
+/***/ "./resources/js/components/KindEdit.vue":
+/*!**********************************************!*\
+  !*** ./resources/js/components/KindEdit.vue ***!
+  \**********************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _KindEdit2_vue_vue_type_template_id_7300b459_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./KindEdit2.vue?vue&type=template&id=7300b459&scoped=true& */ "./resources/js/components/KindEdit2.vue?vue&type=template&id=7300b459&scoped=true&");
-/* harmony import */ var _KindEdit2_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./KindEdit2.vue?vue&type=script&lang=js& */ "./resources/js/components/KindEdit2.vue?vue&type=script&lang=js&");
+/* harmony import */ var _KindEdit_vue_vue_type_template_id_ae438bae_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./KindEdit.vue?vue&type=template&id=ae438bae&scoped=true& */ "./resources/js/components/KindEdit.vue?vue&type=template&id=ae438bae&scoped=true&");
+/* harmony import */ var _KindEdit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./KindEdit.vue?vue&type=script&lang=js& */ "./resources/js/components/KindEdit.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -40454,50 +40455,50 @@ __webpack_require__.r(__webpack_exports__);
 /* normalize component */
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _KindEdit2_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _KindEdit2_vue_vue_type_template_id_7300b459_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _KindEdit2_vue_vue_type_template_id_7300b459_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _KindEdit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _KindEdit_vue_vue_type_template_id_ae438bae_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _KindEdit_vue_vue_type_template_id_ae438bae_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
-  "7300b459",
+  "ae438bae",
   null
   
 )
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/components/KindEdit2.vue"
+component.options.__file = "resources/js/components/KindEdit.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
 
-/***/ "./resources/js/components/KindEdit2.vue?vue&type=script&lang=js&":
-/*!************************************************************************!*\
-  !*** ./resources/js/components/KindEdit2.vue?vue&type=script&lang=js& ***!
-  \************************************************************************/
+/***/ "./resources/js/components/KindEdit.vue?vue&type=script&lang=js&":
+/*!***********************************************************************!*\
+  !*** ./resources/js/components/KindEdit.vue?vue&type=script&lang=js& ***!
+  \***********************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_KindEdit2_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./KindEdit2.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/KindEdit2.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_KindEdit2_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_KindEdit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./KindEdit.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/KindEdit.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_KindEdit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
-/***/ "./resources/js/components/KindEdit2.vue?vue&type=template&id=7300b459&scoped=true&":
-/*!******************************************************************************************!*\
-  !*** ./resources/js/components/KindEdit2.vue?vue&type=template&id=7300b459&scoped=true& ***!
-  \******************************************************************************************/
+/***/ "./resources/js/components/KindEdit.vue?vue&type=template&id=ae438bae&scoped=true&":
+/*!*****************************************************************************************!*\
+  !*** ./resources/js/components/KindEdit.vue?vue&type=template&id=ae438bae&scoped=true& ***!
+  \*****************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_KindEdit2_vue_vue_type_template_id_7300b459_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./KindEdit2.vue?vue&type=template&id=7300b459&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/KindEdit2.vue?vue&type=template&id=7300b459&scoped=true&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_KindEdit2_vue_vue_type_template_id_7300b459_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_KindEdit_vue_vue_type_template_id_ae438bae_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./KindEdit.vue?vue&type=template&id=ae438bae&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/KindEdit.vue?vue&type=template&id=ae438bae&scoped=true&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_KindEdit_vue_vue_type_template_id_ae438bae_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_KindEdit2_vue_vue_type_template_id_7300b459_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_KindEdit_vue_vue_type_template_id_ae438bae_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
@@ -41408,8 +41409,8 @@ var Form = /*#__PURE__*/function () {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\Users\noa\PhpstormProjects\BIC4MagicAlmanac\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\Users\noa\PhpstormProjects\BIC4MagicAlmanac\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\Users\VolkerTenta\PhpstormProjects\BIC4MagicAlmanac\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\Users\VolkerTenta\PhpstormProjects\BIC4MagicAlmanac\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
