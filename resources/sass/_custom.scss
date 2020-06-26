@@ -11,14 +11,16 @@
 }
 
 .is-fullheight.main {
-    min-height: calc(100vh - 10.5rem);
+    min-height: calc(100vh - 9rem);
+
 }
 
 .is-fullheight.section {
-    min-height: calc(100vh - 10.5rem);
+    min-height: calc(100vh - 9rem);
     display: flex;
     align-items: center;
     justify-content: center;
+
 }
 
 .custom-card{
@@ -39,8 +41,9 @@
 }
 
 .footer{
-    height: 11vh;
-    background-color: whitesmoke;
+    height: 9.5vh;
+    /*background-color: whitesmoke;*/
+
 
 }
 
