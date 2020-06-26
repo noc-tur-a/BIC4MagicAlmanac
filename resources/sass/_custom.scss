@@ -11,11 +11,11 @@
 }
 
 .is-fullheight.main {
-    min-height: calc(100vh - 11rem);
+    min-height: calc(100vh - 10.5rem);
 }
 
 .is-fullheight.section {
-    min-height: calc(100vh - 11rem);
+    min-height: calc(100vh - 10.5rem);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -45,7 +45,7 @@
 }
 
 .hero.is-fullheight-with-navbar{
-    min-height: calc(100vh - 11rem);
+    min-height: calc(100vh - 10.5rem);
 }
 
 

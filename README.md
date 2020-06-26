@@ -69,11 +69,10 @@ We only use the Form.js to delete entries, be it Spells or Kinds.
 
 We left the SpellCreateWithForms.vue component for demonstration purpose. If used, one will see that errors like "Spell with same name already
 exists", 404 or Network error (server crashes or unavailable) aren't caught correctly.        
- 
 
 ---
 
-#### Fixes
+##### Fixes
 
 - adjusted screen height and colors
 - show message if there are no Kinds
@@ -88,9 +87,9 @@ We had to alter the Controllers to make certain functionality available and to m
 for all pages (i.e. Error handling). 
 
 The SpellSearch.vue gets all spells from the controller to make them available via the datalist element, yet the
-the search finds all entries matching the input via an regular experssion match.
-  
-.  
+the search finds all entries matching the input via an regular experssion match.  
+
+---
  
 #### Supported Browsers:
 - Firefox
